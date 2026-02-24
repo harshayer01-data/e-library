@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darsh's E-Library — The Restricted Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --gold-dark: #8B6914;
+            --deep: #080608;
+            --surface: #0e0b10;
+            --card: #130f17;
+            --border: rgba(201,168,76,0.2);
+            --parchment: #f5ead6;
+            --text-muted: rgba(245,234,214,0.55);
+            --crimson: #8B0020;
+            --crimson-light: #C0002E;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--deep);
+            color: var(--parchment);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        /* NOISE OVERLAY */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s, backdrop-filter 0.3s;
+        }
+        nav.scrolled {
+            background: rgba(8,6,8,0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-brand {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav-right { display: flex; align-items: center; gap: 32px; }
+        .nav-link {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--gold); }
+        .nav-cta {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            border: 1px solid var(--gold);
+            padding: 8px 20px;
+            transition: all 0.3s;
+        }
+        .nav-cta:hover { background: var(--gold); color: var(--deep); }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 60px 20px;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(96,0,40,0.18) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0708 0%, #080608 100%);
+        }
+
+        /* floating particles */
+        .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up linear infinite;
+        }
+        @keyframes float-up {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            10%  { opacity: 0.6; }
+            90%  { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-100vh) scale(0.5); }
+        }
+
+        .hero-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+            opacity: 0.75;
+            margin-bottom: 28px;
+            text-transform: uppercase;
+        }
+        .hero-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2.2rem, 7vw, 5.5rem);
+            color: var(--gold);
+            line-height: 1.1;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px rgba(201,168,76,0.35), 0 0 80px rgba(201,168,76,0.12);
+            margin-bottom: 10px;
+        }
+        .hero-title span {
+            display: block;
+            font-size: 0.45em;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 8px;
+            color: var(--gold-light);
+            margin-bottom: 4px;
+        }
+        .hero-quote {
+            font-style: italic;
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 28px auto 50px;
+            line-height: 1.7;
+        }
+        .hero-cta {
+            display: inline-block;
+            padding: 18px 56px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-decoration: none;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        .hero-cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--gold);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+        .hero-cta:hover { color: var(--deep); box-shadow: 0 0 40px rgba(201,168,76,0.4); }
+        .hero-cta:hover::before { transform: translateX(0); }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.4;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+        .hero-scroll span {
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 4px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+        .hero-scroll svg { color: var(--gold); }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            margin: 80px auto 0;
+            max-width: 400px;
+            opacity: 0.35;
+        }
+        .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+        .divider-line:last-child { background: linear-gradient(to left, transparent, var(--gold)); }
+        .divider-diamond { width: 8px; height: 8px; border: 1px solid var(--gold); transform: rotate(45deg); }
+
+        /* ── MAIN ── */
+        main { padding: 0 0 0; }
+
+        /* ── MEMBERSHIP TEASER BANNER (after hero) ── */
+        .membership-teaser {
+            background: linear-gradient(135deg, rgba(139,0,32,0.15) 0%, rgba(201,168,76,0.08) 50%, rgba(139,0,32,0.15) 100%);
+            border-top: 1px solid rgba(201,168,76,0.15);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            padding: 28px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .teaser-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--parchment);
+        }
+        .teaser-text em { color: var(--gold); font-style: normal; font-weight: 600; }
+        .teaser-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--deep);
+            background: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 12px 28px;
+            white-space: nowrap;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+        }
+        .teaser-btn:hover { background: var(--gold-light); box-shadow: 0 4px 30px rgba(201,168,76,0.5); transform: translateY(-1px); }
+
+        /* ── SECTION ── */
+        .section { padding: 80px 0 40px; }
+        .section-header { text-align: center; padding: 0 20px; margin-bottom: 60px; }
+        .section-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            opacity: 0.6;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            color: var(--parchment);
+            letter-spacing: 1px;
+        }
+        .section-line {
+            width: 60px; height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 20px auto 0;
+        }
+
+        /* ── SHELF ── */
+        .shelf {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 32px;
+            padding: 0 6%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .book { position: relative; cursor: pointer; }
+        .book-poster-wrap {
+            position: relative;
+            border-radius: 3px;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: transform 0.45s cubic-bezier(.25,.8,.25,1), box-shadow 0.45s ease, border-color 0.3s ease;
+        }
+        .book:hover .book-poster-wrap {
+            transform: translateY(-10px) rotateY(-8deg) scale(1.02);
+            box-shadow: -12px 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(201,168,76,0.15);
+            border-color: rgba(201,168,76,0.5);
+        }
+        .book-poster-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s; }
+        .book:hover .book-poster-wrap img { filter: brightness(1.08); }
+
+        .book-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(8,6,8,0.95) 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            display: flex; align-items: flex-end;
+            padding: 20px 16px;
+        }
+        .book:hover .book-overlay { opacity: 1; }
+        .book-overlay-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+        .badge {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(96,0,30,0.9);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+        }
+        .book-poster-wrap::after {
+            content: '';
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 6px;
+            background: linear-gradient(to right, rgba(0,0,0,0.6), transparent);
+        }
+        .book-info { margin-top: 14px; padding: 0 4px; }
+        .book-title { font-size: 1rem; color: var(--parchment); line-height: 1.4; font-weight: 600; }
+        .book-sub { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 3px; }
+
+        /* ── LOCK OVERLAY for paid books ── */
+        .book-lock {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(8,6,8,0.75) 100%);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            padding-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 3;
+        }
+        .book:hover .book-lock { opacity: 1; }
+        .lock-icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .lock-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .lock-btn {
+            margin-top: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+            color: var(--deep);
+            background: var(--gold);
+            text-decoration: none;
+            padding: 6px 14px;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+        .lock-btn:hover { background: var(--gold-light); }
+
+        .section-sep {
+            max-width: 200px;
+            margin: 80px auto 0;
+            text-align: center;
+            color: var(--gold);
+            opacity: 0.25;
+            font-size: 1.2rem;
+            letter-spacing: 12px;
+        }
+
+        /* ── MEMBERSHIP SECTION ── */
+        .membership-section {
+            margin: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .membership-section::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 100% 80% at 50% 50%, rgba(139,0,32,0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 60%);
+        }
+        .membership-section::after {
+            content: '';
+            position: absolute; left: 0; right: 0; top: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .membership-inner {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 6%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .membership-left {}
+
+        .membership-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            color: var(--crimson-light);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .membership-eyebrow::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--crimson-light), transparent);
+            max-width: 60px;
+        }
+
+        .membership-heading {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            color: var(--parchment);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .membership-heading em {
+            color: var(--gold);
+            font-style: normal;
+            display: block;
+        }
+
+        .membership-subhead {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.7;
+            margin: 20px 0 40px;
+            max-width: 420px;
+        }
+
+        .perks-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+        .perks-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 1.05rem;
+            color: var(--parchment);
+            line-height: 1.5;
+        }
+        .perk-icon {
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgba(201,168,76,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+            color: var(--gold);
+        }
+        .perk-label { font-weight: 600; color: var(--parchment); }
+        .perk-desc { font-size: 0.9rem; color: var(--text-muted); font-style: italic; }
+
+        .membership-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 44px;
+            background: var(--gold);
+            color: var(--deep);
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(201,168,76,0.35);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--gold-light);
+            transform: translateX(-100%);
+            transition: transform 0.35s ease;
+        }
+        .btn-primary:hover { box-shadow: 0 12px 40px rgba(201,168,76,0.55); transform: translateY(-2px); }
+        .btn-primary:hover::before { transform: translateX(0); }
+        .btn-primary span { position: relative; z-index: 1; }
+
+        .btn-secondary {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(245,234,214,0.2);
+            padding-bottom: 2px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .btn-secondary:hover { color: var(--gold); border-color: var(--gold); }
+
+        /* ── RIGHT SIDE: Membership Card ── */
+        .membership-card {
+            background: linear-gradient(135deg, #1a0f10 0%, #0f0a14 50%, #1a0f10 100%);
+            border: 1px solid rgba(201,168,76,0.3);
+            padding: 48px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .membership-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+        }
+        .membership-card::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -60px;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139,0,32,0.15) 0%, transparent 70%);
+        }
+
+        .card-inner { position: relative; z-index: 1; }
+
+        .card-badge {
+            display: inline-block;
+            background: var(--crimson);
+            border: 1px solid rgba(201,168,76,0.4);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            padding: 6px 16px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+        @keyframes pulse-border {
+            0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+            50% { box-shadow: 0 0 0 4px rgba(201,168,76,0.12); }
+        }
+
+        .card-price {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3.5rem;
+            color: var(--gold);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(201,168,76,0.3);
+        }
+        .card-price sup { font-size: 1.2rem; vertical-align: super; }
+        .card-price sub { font-size: 1rem; font-family: 'Cinzel', serif; letter-spacing: 2px; color: var(--text-muted); }
+
+        .card-period {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin: 8px 0 32px;
+        }
+
+        .card-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+            margin: 28px 0;
+        }
+
+        .card-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+        .card-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--parchment);
+        }
+        .card-features li .check {
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .card-cta {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            background-size: 200% 100%;
+            color: var(--deep);
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%,100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .card-cta:hover {
+            box-shadow: 0 8px 30px rgba(201,168,76,0.5);
+            transform: translateY(-2px);
+        }
+
+        .card-note {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ── WHAT YOU GET strip ── */
+        .perks-strip {
+            background: linear-gradient(180deg, transparent, rgba(201,168,76,0.04) 50%, transparent);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 60px 6%;
+        }
+        .perks-strip-title {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            opacity: 0.7;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .perk-card {
+            text-align: center;
+            padding: 32px 20px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .perk-card:hover {
+            border-color: rgba(201,168,76,0.5);
+            transform: translateY(-4px);
+        }
+        .perk-card-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .perk-card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .perk-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        /* ── COMING SOON ── */
+        .coming-soon {
+            text-align: center;
+            padding: 80px 20px;
+            font-style: italic;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--text-muted);
+        }
+        .coming-soon::before, .coming-soon::after { content: '✦'; color: var(--gold); opacity: 0.4; margin: 0 16px; }
+
+        /* ── FINAL CTA BANNER ── */
+        .final-cta {
+            margin: 40px 6% 100px;
+            padding: 80px 60px;
+            background: linear-gradient(135deg, #130810 0%, #0a0510 50%, #130810 100%);
+            border: 1px solid rgba(201,168,76,0.25);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .final-cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+        }
+        .final-cta-corners::before,
+        .final-cta-corners::after {
+            content: '';
+            position: absolute;
+            width: 30px; height: 30px;
+        }
+        .final-cta .corner-tl { position: absolute; top: 16px; left: 16px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); width: 30px; height: 30px; opacity: 0.6; }
+        .final-cta .corner-tr { position: absolute; top: 16px; right: 16px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); width: 30px; height: 30px; opacity: 0.6; }
+        .final-cta .corner-bl { position: absolute; bottom: 16px; left: 16px; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); width: 30px; height: 30px; opacity: 0.6; }
+        .final-cta .corner-br { position: absolute; bottom: 16px; right: 16px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); width: 30px; height: 30px; opacity: 0.6; }
+
+        .final-cta-inner { position: relative; z-index: 1; }
+        .final-cta-heading {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.5rem, 4vw, 2.8rem);
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-shadow: 0 0 40px rgba(201,168,76,0.2);
+        }
+        .final-cta-sub {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-muted);
+            font-style: italic;
+            max-width: 500px;
+            margin: 0 auto 44px;
+            line-height: 1.7;
+        }
+        .final-cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .footer-logo { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 16px; }
+        .footer-tagline { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 5px; color: var(--gold); opacity: 0.4; text-transform: uppercase; margin-bottom: 30px; }
+        .footer-copy { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* ── ANIMATIONS ── */
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ══════════════════════════════════
+           MOBILE FIRST — RESPONSIVE STYLES
+           ══════════════════════════════════ */
+
+        /* Touch devices: always show lock overlay so users can tap Unlock */
+        @media (hover: none) {
+            .book-lock { opacity: 1; background: linear-gradient(180deg, transparent 45%, rgba(8,6,8,0.88) 100%); }
+            .book-overlay { opacity: 1; }
+        }
+
+        /* ── TABLET (max 900px) ── */
+        @media (max-width: 900px) {
+            .membership-inner { grid-template-columns: 1fr; gap: 50px; padding: 70px 6%; }
+            .perks-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── MOBILE (max 640px) ── */
+        @media (max-width: 640px) {
+            nav { padding: 14px 5%; }
+            .nav-brand { font-size: 0.78rem; }
+            .nav-right { gap: 14px; }
+            .nav-right .nav-link { display: none; }
+            .nav-cta { font-size: 0.55rem; letter-spacing: 2px; padding: 8px 14px; }
+
+            .hero { padding: 80px 20px 100px; min-height: 100svh; }
+            .hero-eyebrow { font-size: 0.55rem; letter-spacing: 4px; margin-bottom: 20px; }
+            .hero-title { font-size: clamp(2rem, 11vw, 3rem); letter-spacing: 1px; }
+            .hero-title span { letter-spacing: 5px; }
+            .hero-quote { font-size: 1rem; margin: 20px auto 36px; padding: 0 10px; }
+            .hero-cta { padding: 15px 32px; font-size: 0.65rem; letter-spacing: 2px; width: 100%; max-width: 300px; text-align: center; }
+            .divider { margin-top: 50px; }
+            .hero-scroll { bottom: 24px; }
+
+            .membership-teaser { flex-direction: column; gap: 16px; padding: 24px 5%; text-align: center; }
+            .teaser-text { font-size: 0.95rem; line-height: 1.6; }
+            .teaser-btn { width: 100%; text-align: center; padding: 14px 20px; font-size: 0.6rem; }
+
+            .section { padding: 60px 0 30px; }
+            .section-header { margin-bottom: 40px; padding: 0 16px; }
+            .section-title { font-size: 1.35rem; }
+
+            .shelf { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 0 4%; }
+            .book-title { font-size: 0.9rem; }
+            .book-sub { font-size: 0.75rem; }
+            .book-info { margin-top: 10px; }
+            .badge { font-size: 0.45rem; padding: 3px 7px; }
+            .lock-btn { font-size: 0.45rem; padding: 5px 10px; margin-top: 6px; }
+            .lock-text { font-size: 0.45rem; letter-spacing: 1px; }
+            .lock-icon { font-size: 1.1rem; margin-bottom: 3px; }
+
+            .section-sep { margin: 50px auto 0; }
+
+            .perks-strip { padding: 50px 5%; }
+            .perks-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .perk-card { padding: 24px 14px; }
+            .perk-card-icon { font-size: 1.6rem; margin-bottom: 10px; }
+            .perk-card-title { font-size: 0.6rem; letter-spacing: 2px; }
+            .perk-card-desc { font-size: 0.82rem; }
+
+            .membership-inner { grid-template-columns: 1fr; gap: 40px; padding: 60px 5%; }
+            .membership-heading { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+            .membership-subhead { font-size: 1rem; margin-bottom: 28px; }
+            .perks-list { gap: 14px; margin-bottom: 36px; }
+            .perks-list li { font-size: 0.95rem; }
+            .perk-icon { width: 24px; height: 24px; font-size: 0.75rem; }
+            .membership-cta-group { flex-direction: column; align-items: stretch; gap: 16px; }
+            .btn-primary { justify-content: center; padding: 16px 24px; font-size: 0.65rem; }
+            .btn-secondary { text-align: center; padding-bottom: 4px; }
+
+            .membership-card { padding: 36px 24px; }
+            .card-price { font-size: 3rem; }
+            .card-features li { font-size: 0.88rem; }
+            .card-cta { font-size: 0.62rem; letter-spacing: 2px; padding: 15px; }
+
+            .final-cta { margin: 30px 4% 70px; padding: 50px 24px; }
+            .final-cta-heading { font-size: clamp(1.4rem, 7vw, 2rem); }
+            .final-cta-sub { font-size: 1rem; margin-bottom: 32px; }
+            .final-cta-btns { flex-direction: column; align-items: center; }
+            .final-cta-btns .btn-primary { width: 100%; max-width: 320px; justify-content: center; }
+
+            .coming-soon { padding: 60px 20px; font-size: 1rem; }
+            footer { padding: 50px 20px; }
+            .footer-logo { font-size: 1.1rem; }
+        }
+
+        /* ── TINY PHONES (max 380px) ── */
+        @media (max-width: 380px) {
+            .hero-title { font-size: 1.9rem; }
+            .shelf { gap: 12px; }
+            .book-title { font-size: 0.82rem; }
+            .book-sub { font-size: 0.7rem; }
+            .membership-card { padding: 28px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <a class="nav-brand" href="#">D·Library</a>
+        <div class="nav-right">
+            <a class="nav-link" href="#collections">Collections</a>
+            <a class="nav-link" href="#membership">Membership</a>
+            <a class="nav-cta" href="https://tinyurl.com/ElibraryDarshMembership" target="_blank">Join Now</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="particles" id="particles"></div>
+        <p class="hero-eyebrow">Official Wizarding Archive · Est. 2026</p>
+        <h1 class="hero-title">
+            <span>Darsh's</span>
+            Library
+        </h1>
+        <p class="hero-quote">"The stories we love best do live in us forever."</p>
+        <a href="https://tinyurl.com/ElibraryDarshMembership" class="hero-cta" target="_blank">Unlock the Restricted Section</a>
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-diamond"></div>
+            <div class="divider-diamond"></div>
+            <div class="divider-diamond"></div>
+            <div class="divider-line"></div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+    </header>
+
+    <!-- TEASER BANNER -->
+    <div class="membership-teaser">
+        <p class="teaser-text">🔒 <em>4 exclusive collections</em> locked behind membership — Unlock everything for just <em>₹99/month</em></p>
+        <a href="https://tinyurl.com/ElibraryDarshMembership" class="teaser-btn" target="_blank">Get Instant Access →</a>
+    </div>
+
+    <main>
+
+        <!-- COLLECTIONS -->
+        <div id="collections"></div>
+
+        <!-- WIZARDING ARCHIVE -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">Collection I</span>
+                <h2 class="section-title">The Wizarding Archive</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="shelf">
+                <div class="book reveal reveal-delay-1">
+                    <div class="book-poster-wrap">
+                        <span class="badge">Paid</span>
+                        <img src="book_posters/harry_potter.jpg" alt="Harry Potter Series">
+                        <div class="book-lock">
+                            <span class="lock-icon">🔒</span>
+                            <span class="lock-text">Members Only</span>
+                            <a href="https://tinyurl.com/ElibraryDarshMembership" class="lock-btn" target="_blank">Unlock</a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Harry Potter</div>
+                        <div class="book-sub">Complete Series, Books 1–7</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-2">
+                    <div class="book-poster-wrap">
+                        <span class="badge">Paid</span>
+                        <img src="book_posters/fantastic_beasts.jpg" alt="Fantastic Beasts">
+                        <div class="book-lock">
+                            <span class="lock-icon">🔒</span>
+                            <span class="lock-text">Members Only</span>
+                            <a href="https://tinyurl.com/ElibraryDarshMembership" class="lock-btn" target="_blank">Unlock</a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Fantastic Beasts</div>
+                        <div class="book-sub">Complete Library Set</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-3">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/chronicles_of_narnia.jpg" alt="Chronicles of Narnia">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">The Chronicles of Narnia</div>
+                        <div class="book-sub">C.S. Lewis · Complete Edition</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-sep">· · ·</div>
+
+        <!-- MANGA & MODERN -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">Collection II</span>
+                <h2 class="section-title">Manga & Modern Tales</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="shelf">
+                <div class="book reveal reveal-delay-1">
+                    <div class="book-poster-wrap">
+                        <span class="badge">Paid</span>
+                        <img src="book_posters/demon_slayer_spy_x_family.jpg" alt="Demon Slayer">
+                        <div class="book-lock">
+                            <span class="lock-icon">🔒</span>
+                            <span class="lock-text">Members Only</span>
+                            <a href="https://tinyurl.com/ElibraryDarshMembership" class="lock-btn" target="_blank">Unlock</a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Demon Slayer · Spy x Family</div>
+                        <div class="book-sub">Manga Collection</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-2">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/diary_of_a_wimpy_kid.jpg" alt="Diary of a Wimpy Kid">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Diary of a Wimpy Kid</div>
+                        <div class="book-sub">Jeff Kinney · Full Series</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-3">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/geronimo_stilton_zac_power.jpg" alt="Geronimo Stilton">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Geronimo Stilton · Zac Power</div>
+                        <div class="book-sub">Adventure Series</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-sep">· · ·</div>
+
+        <!-- HERITAGE & CLASSICS -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">Collection III</span>
+                <h2 class="section-title">Heritage & Classics</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="shelf">
+                <div class="book reveal reveal-delay-1">
+                    <div class="book-poster-wrap">
+                        <span class="badge">Paid</span>
+                        <img src="book_posters/ramayana_mahabharata_gita.jpg" alt="Ramayana">
+                        <div class="book-lock">
+                            <span class="lock-icon">🔒</span>
+                            <span class="lock-text">Members Only</span>
+                            <a href="https://tinyurl.com/ElibraryDarshMembership" class="lock-btn" target="_blank">Unlock</a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Ramayana · Mahabharata · Gita</div>
+                        <div class="book-sub">Sacred Epics Collection</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-2">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/sudha_murty_tenali_akbar.jpg" alt="Sudha Murty">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Sudha Murty · Tenali Rama</div>
+                        <div class="book-sub">Akbar Birbal · Tales</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-3">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/matilda_tom_sawyer.jpg" alt="Matilda">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Matilda · Tom Sawyer</div>
+                        <div class="book-sub">Timeless Children's Classics</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-sep">· · ·</div>
+
+        <!-- HALL OF KNOWLEDGE -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">Collection IV</span>
+                <h2 class="section-title">The Hall of Knowledge</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="shelf" style="max-width: 700px;">
+                <div class="book reveal reveal-delay-1">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/great_biographies.jpg" alt="Great Biographies">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Great Biographies</div>
+                        <div class="book-sub">Inspiring Lives & Legacies</div>
+                    </div>
+                </div>
+                <div class="book reveal reveal-delay-2">
+                    <div class="book-poster-wrap">
+                        <img src="book_posters/scientific_encyclopedias.jpg" alt="Scientific Encyclopedias">
+                        <div class="book-overlay"><span class="book-overlay-text">✦ Free Access</span></div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Scientific Encyclopedias</div>
+                        <div class="book-sub">The Universe Explained</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <p class="coming-soon">More magical volumes arriving soon by Owl Post</p>
+
+        <!-- ══════════════════════════════════════ -->
+        <!--         MEMBERSHIP SECTION             -->
+        <!-- ══════════════════════════════════════ -->
+        <div id="membership"></div>
+
+        <!-- PERKS STRIP -->
+        <div class="perks-strip">
+            <p class="perks-strip-title">What members get</p>
+            <div class="perks-grid">
+                <div class="perk-card reveal reveal-delay-1">
+                    <span class="perk-card-icon">📚</span>
+                    <div class="perk-card-title">Full Library Access</div>
+                    <p class="perk-card-desc">Every locked book, every collection — all yours instantly</p>
+                </div>
+                <div class="perk-card reveal reveal-delay-2">
+                    <span class="perk-card-icon">⚡</span>
+                    <div class="perk-card-title">Instant Downloads</div>
+                    <p class="perk-card-desc">Read on any device, anytime, even offline</p>
+                </div>
+                <div class="perk-card reveal reveal-delay-3">
+                    <span class="perk-card-icon">✨</span>
+                    <div class="perk-card-title">New Arrivals First</div>
+                    <p class="perk-card-desc">Members get every new book the moment it lands</p>
+                </div>
+                <div class="perk-card reveal reveal-delay-1">
+                    <span class="perk-card-icon">🛡️</span>
+                    <div class="perk-card-title">Cancel Anytime</div>
+                    <p class="perk-card-desc">No lock-in, no hassle. Your choice, always</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN MEMBERSHIP PROMOTION -->
+        <section class="membership-section">
+            <div class="membership-inner">
+                <!-- LEFT -->
+                <div class="membership-left reveal">
+                    <p class="membership-eyebrow">Restricted Section</p>
+                    <h2 class="membership-heading">
+                        Unlock the Full
+                        <em>Wizarding Archive</em>
+                    </h2>
+                    <p class="membership-subhead">
+                        Over a dozen carefully curated books across fantasy, manga, mythology and classics — all waiting behind one membership. Your reading adventure begins the moment you join.
+                    </p>
+                    <ul class="perks-list">
+                        <li>
+                            <div class="perk-icon">📖</div>
+                            <div>
+                                <div class="perk-label">Harry Potter Complete Series</div>
+                                <div class="perk-desc">All 7 books — from the Philosopher's Stone to the Deathly Hallows</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="perk-icon">⚔</div>
+                            <div>
+                                <div class="perk-label">Manga Collection</div>
+                                <div class="perk-desc">Demon Slayer, Spy × Family and more</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="perk-icon">🕉</div>
+                            <div>
+                                <div class="perk-label">Sacred Indian Epics</div>
+                                <div class="perk-desc">Ramayana, Mahabharata & the Bhagavad Gita</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="perk-icon">✨</div>
+                            <div>
+                                <div class="perk-label">Growing Library</div>
+                                <div class="perk-desc">New titles added regularly — members get access automatically</div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="membership-cta-group">
+                        <a href="https://tinyurl.com/ElibraryDarshMembership" class="btn-primary" target="_blank">
+                            <span>✦ Join Now</span>
+                        </a>
+                        <a href="#collections" class="btn-secondary">Browse Free Books</a>
+                    </div>
+                </div>
+
+                <!-- RIGHT: CARD -->
+                <div class="reveal reveal-delay-2">
+                    <div class="membership-card">
+                        <div class="card-inner">
+                            <div class="card-badge">✦ Restricted Access</div>
+                            <div class="card-price">
+                                <sup>₹</sup>99<sub>/mo</sub>
+                            </div>
+                            <p class="card-period">Per Month · Cancel Anytime</p>
+                            <div class="card-divider"></div>
+                            <ul class="card-features">
+                                <li><span class="check">✦</span> Full Harry Potter series (Books 1–7)</li>
+                                <li><span class="check">✦</span> Fantastic Beasts library set</li>
+                                <li><span class="check">✦</span> Demon Slayer & Spy × Family manga</li>
+                                <li><span class="check">✦</span> Ramayana, Mahabharata & Gita</li>
+                                <li><span class="check">✦</span> All future locked titles</li>
+                                <li><span class="check">✦</span> Read on any device, any time</li>
+                            </ul>
+                            <div class="card-divider"></div>
+                            <a href="https://tinyurl.com/ElibraryDarshMembership" class="card-cta" target="_blank">
+                                Unlock Everything Now
+                            </a>
+                            <p class="card-note">Instant access · Secure payment · Cancel anytime</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA BANNER -->
+        <div class="final-cta reveal">
+            <div class="corner-tl"></div>
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+            <div class="corner-br"></div>
+            <div class="final-cta-inner">
+                <h2 class="final-cta-heading">Your Story Awaits</h2>
+                <p class="final-cta-sub">Don't let the Restricted Section stay locked forever. Join today and step into worlds beyond imagination.</p>
+                <div class="final-cta-btns">
+                    <a href="https://tinyurl.com/ElibraryDarshMembership" class="btn-primary" target="_blank">
+                        <span>✦ Become a Member</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-logo">Darsh's Library</div>
+        <div class="footer-tagline">Mischief Managed</div>
+        <p class="footer-copy">© 2026 Darsh Mulgaonkar · Official E-Library of Magic</p>
+    </footer>
+
+    <script>
+        // Sticky nav
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 80);
+        });
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.08 });
+        reveals.forEach(el => observer.observe(el));
+
+        // Floating particles
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.bottom = '-10px';
+            p.style.animationDuration = (8 + Math.random() * 16) + 's';
+            p.style.animationDelay = (Math.random() * 20) + 's';
+            p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+            container.appendChild(p);
+        }
+    </script>
+</body>
+</html>
