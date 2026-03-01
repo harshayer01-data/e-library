@@ -2,815 +2,1146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#080608">
-    <title>E-Library — Games & Quizzes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Library by Darsh Mulgaonkar — The Restricted Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* ══ RESET & TOKENS ══ */
-        :root{
-            --gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
-            --deep:#080608;--card:#130f17;--surface:#0d0b10;
-            --border:rgba(201,168,76,.22);--parchment:#f5ead6;
-            --muted:rgba(245,234,214,.55);
-            --nav-h:58px;
-            --safe-bottom:env(safe-area-inset-bottom,0px);
-        }
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-        body{background:var(--deep);color:var(--parchment);font-family:'Cormorant Garamond',serif;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
-
-        /* noise texture */
-        body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.35;}
-
-        /* ══ NAV ══ */
-        nav{
-            position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-            z-index:900;padding:0 16px;
-            display:flex;align-items:center;justify-content:space-between;
-            transition:background .3s;
-        }
-        nav.scrolled{background:rgba(8,6,8,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
-        .nav-brand{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold);letter-spacing:2px;text-decoration:none;flex-shrink:0;}
-        /* Desktop links — hidden on mobile by default */
-        .nav-links{display:none;}
-        /* Hamburger — always visible */
-        .hamburger{
-            display:flex;flex-direction:column;justify-content:center;gap:5px;
-            background:none;border:none;padding:10px 8px;cursor:pointer;
-            z-index:1100;-webkit-tap-highlight-color:transparent;
-            min-width:44px;min-height:44px;align-items:center;
-        }
-        .hamburger span{display:block;width:22px;height:2px;background:var(--gold);border-radius:2px;transition:transform .3s,opacity .3s;}
-        .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-        .hamburger.open span:nth-child(2){opacity:0;}
-        .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-
-        /* ── Drawer ── */
-        .nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:950;opacity:0;pointer-events:none;transition:opacity .3s;}
-        .nav-overlay.show{opacity:1;pointer-events:all;}
-        .nav-drawer{
-            position:fixed;top:0;right:0;bottom:0;width:min(300px,82vw);
-            background:#0d0a12;border-left:1px solid var(--border);
-            z-index:960;padding:70px 28px calc(28px + var(--safe-bottom));
-            display:flex;flex-direction:column;
-            transform:translateX(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);
-            overflow-y:auto;
-        }
-        .nav-drawer.open{transform:translateX(0);}
-        .nav-drawer-link{
-            font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:3px;
-            color:var(--muted);text-decoration:none;text-transform:uppercase;
-            padding:16px 0;border-bottom:1px solid rgba(201,168,76,.07);
-            display:flex;align-items:center;gap:14px;transition:color .2s;
-            min-height:52px;
-        }
-        .nav-drawer-link:last-of-type{border-bottom:none;}
-        .nav-drawer-link.active,.nav-drawer-link:active{color:var(--gold);}
-        .nav-di{font-size:1.15rem;width:26px;flex-shrink:0;}
-        .nav-drawer-cta{
-            margin-top:auto;padding-top:24px;
-            display:block;text-align:center;padding:16px;background:var(--gold);
-            color:var(--deep);font-family:'Cinzel',serif;font-size:.68rem;
-            letter-spacing:3px;text-decoration:none;text-transform:uppercase;font-weight:700;
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --gold-dark: #8B6914;
+            --deep: #080608;
+            --card: #130f17;
+            --border: rgba(201,168,76,0.2);
+            --parchment: #f5ead6;
+            --text-muted: rgba(245,234,214,0.55);
+            --crimson: #8B0020;
+            --crimson-light: #C0002E;
+            /* House colours */
+            --gryffindor: #740001;
+            --gryffindor-acc: #D3A625;
+            --slytherin: #1A472A;
+            --slytherin-acc: #AAAAAA;
+            --ravenclaw: #0E1A40;
+            --ravenclaw-acc: #946B2D;
+            --hufflepuff: #ECB939;
+            --hufflepuff-acc: #372E29;
         }
 
-        /* ══ PAGE HERO ══ */
-        .page-hero{
-            min-height:38vh;display:flex;flex-direction:column;
-            align-items:center;justify-content:center;text-align:center;
-            padding:calc(var(--nav-h) + 36px) 20px 50px;
-            background:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(201,168,76,.13) 0%,transparent 70%);
-            position:relative;
-        }
-        .page-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:.25;}
-        .eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:5px;color:var(--gold);opacity:.7;margin-bottom:14px;text-transform:uppercase;}
-        .page-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.8rem,8vw,3.2rem);color:var(--gold);line-height:1.1;margin-bottom:12px;text-shadow:0 0 40px rgba(201,168,76,.3);}
-        .page-sub{font-style:italic;font-size:clamp(.95rem,3.5vw,1.1rem);color:var(--muted);max-width:380px;line-height:1.65;}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
 
-        /* ══ GAME TABS — mobile pill style ══ */
-        .tabs-wrap{padding:24px 12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-        .tabs-wrap::-webkit-scrollbar{display:none;}
-        .tabs-bar{
-            display:inline-flex;gap:0;min-width:max-content;
-            border:1px solid var(--border);border-radius:6px;overflow:hidden;
+        body {
+            background: var(--deep);
+            color: var(--parchment);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            cursor: none;
         }
-        .tab-btn{
-            font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:2px;
-            color:var(--muted);background:transparent;border:none;border-right:1px solid var(--border);
-            padding:14px 16px;cursor:pointer;text-transform:uppercase;transition:all .2s;
-            white-space:nowrap;min-height:48px;display:flex;align-items:center;gap:6px;
-            -webkit-tap-highlight-color:transparent;
+
+        /* ── CUSTOM WAND CURSOR ── */
+        #cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            mix-blend-mode: screen;
         }
-        .tab-btn:last-child{border-right:none;}
-        .tab-btn.active{color:var(--deep);background:var(--gold);font-weight:700;}
-        .tab-btn:active:not(.active){background:rgba(201,168,76,.08);}
-        .tab-icon{font-size:.9rem;}
-        .tabs-content{margin-top:2px;border-top:1px solid var(--border);}
-        .tab-panel{display:none;}
-        .tab-panel.active{display:block;animation:fadeUp .3s ease;}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-        /* ══ SHARED GAME STYLES ══ */
-        .game-wrap{max-width:640px;margin:0 auto;padding:28px 16px 80px;}
-        .game-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.3rem,5vw,1.8rem);color:var(--gold);margin-bottom:8px;text-align:center;}
-        .game-desc{font-style:italic;color:var(--muted);text-align:center;font-size:.95rem;margin-bottom:28px;line-height:1.6;}
-
-        /* Buttons */
-        .gold-btn{
-            font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:2px;
-            color:var(--deep);background:var(--gold);border:none;
-            padding:14px 28px;cursor:pointer;text-transform:uppercase;font-weight:700;
-            transition:background .2s;min-height:48px;border-radius:2px;
-            -webkit-tap-highlight-color:transparent;
+        #cursor.clicking { width: 36px; height: 36px; border-color: #fff; }
+        #cursor-dot {
+            width: 5px; height: 5px;
+            background: var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
         }
-        .gold-btn:active{background:var(--gold-light);}
-        .ghost-btn{
-            font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:2px;
-            color:var(--muted);background:none;border:1px solid var(--border);
-            padding:13px 22px;cursor:pointer;text-transform:uppercase;
-            transition:all .2s;min-height:48px;border-radius:2px;
-            -webkit-tap-highlight-color:transparent;
+
+        /* ── SPELL SPARKS ── */
+        .spark {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            border-radius: 50%;
+            animation: spark-burst 0.7s ease-out forwards;
         }
-        .ghost-btn:active{border-color:var(--gold);color:var(--gold);}
-
-        /* Scoreboard */
-        .score-board{display:flex;justify-content:center;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:4px;overflow:hidden;}
-        .score-item{flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border);}
-        .score-item:last-child{border-right:none;}
-        .score-val{font-family:'Cinzel Decorative',serif;font-size:1.6rem;color:var(--gold);line-height:1;}
-        .score-lbl{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:4px;}
-
-        /* Result card */
-        .result-card{text-align:center;padding:36px 20px;background:var(--card);border:1px solid var(--border);position:relative;overflow:hidden;border-radius:2px;}
-        .result-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(201,168,76,.06),transparent);pointer-events:none;}
-        .r-emoji{font-size:3.5rem;display:block;margin-bottom:14px;}
-        .r-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.3rem,5vw,1.8rem);color:var(--gold);margin-bottom:8px;}
-        .r-sub{font-style:italic;color:var(--muted);font-size:.95rem;margin-bottom:22px;line-height:1.6;}
-        .r-score{font-family:'Cinzel Decorative',serif;font-size:2.8rem;color:var(--gold);display:block;margin-bottom:4px;}
-        .r-max{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:24px;display:block;}
-        .r-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-
-        /* ── 1. TRIVIA BLITZ ── */
-        .diff-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
-        .diff-btn{flex:1;min-width:90px;max-width:140px;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:2px;padding:14px 10px;border:1px solid var(--border);background:transparent;color:var(--muted);text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .2s;min-height:52px;}
-        .diff-btn.sel,.diff-btn:active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1);}
-        .trivia-card{background:var(--card);border:1px solid var(--border);padding:22px 18px;position:relative;border-radius:2px;}
-        .trivia-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,var(--gold),transparent);}
-        .tq-timer-bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin-bottom:20px;overflow:hidden;}
-        .tq-timer-fill{height:100%;background:linear-gradient(to right,var(--gold),#ff8c00);border-radius:3px;transition:width .1s linear;}
-        .tq-cat{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:4px;color:var(--gold);opacity:.6;margin-bottom:6px;text-transform:uppercase;}
-        .tq-q{font-size:clamp(1rem,4vw,1.25rem);font-weight:600;line-height:1.5;margin-bottom:20px;color:var(--parchment);}
-        .tq-progress{display:flex;gap:5px;margin-bottom:18px;}
-        .tq-dot{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;transition:background .3s;}
-        .tq-dot.right{background:#4CAF50;} .tq-dot.wrong{background:#ef5350;} .tq-dot.cur{background:var(--gold);animation:blink 1s infinite;}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-        .tq-opts{display:flex;flex-direction:column;gap:10px;}
-        .tq-opt{
-            width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
-            color:var(--parchment);font-family:'Cormorant Garamond',serif;font-size:1rem;
-            padding:14px 16px;text-align:left;cursor:pointer;border-radius:2px;
-            transition:border-color .15s,background .15s;line-height:1.4;min-height:52px;
-            -webkit-tap-highlight-color:transparent;
+        @keyframes spark-burst {
+            0%   { opacity: 1; transform: translate(var(--tx), var(--ty)) scale(1); }
+            100% { opacity: 0; transform: translate(calc(var(--tx)*4), calc(var(--ty)*4)) scale(0); }
         }
-        .tq-opt:active:not(.disabled){border-color:var(--gold);background:rgba(201,168,76,.1);}
-        .tq-opt.correct{border-color:#4CAF50;background:rgba(76,175,80,.18);color:#a5d6a7;}
-        .tq-opt.wrong{border-color:#ef5350;background:rgba(239,83,80,.14);color:#ef9a9a;}
-        .tq-opt.disabled{opacity:.7;pointer-events:none;}
-        .tq-fb{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;padding:12px 14px;margin-top:14px;border-radius:2px;display:none;animation:fadeUp .3s ease;}
-        .tq-fb.show{display:block;}
-        .tq-fb.right{background:rgba(76,175,80,.12);border:1px solid #4CAF50;color:#a5d6a7;}
-        .tq-fb.wrong{background:rgba(239,83,80,.1);border:1px solid #ef5350;color:#ef9a9a;}
-        .tq-fb.time{background:rgba(255,165,0,.1);border:1px solid orange;color:#ffcc80;}
 
-        /* ── 2. SPELL SCRAMBLE ── */
-        .scr-word{
-            font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,7vw,2.8rem);
-            color:var(--gold);text-align:center;letter-spacing:6px;margin:22px 0;
-            text-shadow:0 0 20px rgba(201,168,76,.3);animation:glow 2.5s ease-in-out infinite;
-            word-break:break-all;
+        /* ── NOISE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9990; opacity: 0.4;
         }
-        @keyframes glow{0%,100%{text-shadow:0 0 16px rgba(201,168,76,.3)}50%{text-shadow:0 0 36px rgba(201,168,76,.55),0 0 55px rgba(201,168,76,.18)}}
-        .scr-cat{display:block;font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:3px;color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:5px 14px;text-transform:uppercase;width:fit-content;margin:0 auto 8px;border-radius:2px;}
-        .scr-hint{font-style:italic;color:var(--muted);text-align:center;font-size:.92rem;margin-bottom:22px;line-height:1.5;}
-        .scr-input-wrap{display:flex;flex-direction:column;gap:10px;align-items:center;margin-bottom:14px;}
-        .scr-input{
-            font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);
-            background:transparent;border:none;border-bottom:2px solid var(--border);
-            width:100%;max-width:300px;padding:12px 4px;text-align:center;letter-spacing:5px;
-            outline:none;text-transform:uppercase;-webkit-appearance:none;border-radius:0;
-            transition:border-color .2s;
-        }
-        .scr-input:focus{border-bottom-color:var(--gold);}
-        .scr-input::placeholder{color:rgba(201,168,76,.2);font-size:.9rem;letter-spacing:2px;}
-        .scr-cast-btn{width:100%;max-width:300px;}
-        .scr-fb{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:2px;text-align:center;padding:12px;text-transform:uppercase;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:2px;}
-        .scr-fb.ok{color:#a5d6a7;background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.3);}
-        .scr-fb.no{color:#ef9a9a;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.3);}
-        .scr-skip{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:2px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;margin-top:10px;display:block;width:100%;text-align:center;padding:10px;min-height:44px;}
-        .scr-skip:active{color:var(--gold);}
 
-        /* ── 3. MEMORY MATCH ── */
-        .mm-grid{
-            display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-            margin:0 auto 22px;width:100%;max-width:360px;
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 1000; padding: 16px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: background 0.3s;
         }
-        .mc{
-            aspect-ratio:1;border:1px solid var(--border);cursor:pointer;
-            position:relative;overflow:hidden;border-radius:4px;
-            -webkit-tap-highlight-color:transparent;
+        nav.scrolled { background: rgba(8,6,8,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-brand { font-family: 'Cinzel Decorative', serif; font-size: 0.85rem; color: var(--gold); letter-spacing: 2px; text-decoration: none; }
+        .nav-right { display: flex; align-items: center; gap: 24px; }
+        .nav-link { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 3px; color: var(--text-muted); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+        .nav-link:hover { color: var(--gold); }
+        .nav-link.active { color: var(--gold); }
+        .nav-cta { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 2px; color: var(--deep); background: var(--gold); text-decoration: none; text-transform: uppercase; padding: 9px 18px; transition: all 0.3s; font-weight: 700; }
+        .nav-cta:hover { background: var(--gold-light); box-shadow: 0 0 20px rgba(201,168,76,0.5); }
+        /* Hamburger */
+        .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:10px 8px; z-index:1100; min-width:44px; min-height:44px; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; }
+        .hamburger span { display:block; width:22px; height:2px; background:var(--gold); transition:transform .3s, opacity .3s; border-radius:2px; }
+        .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity:0; }
+        .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+        /* Mobile drawer */
+        .nav-drawer {
+            position:fixed; top:0; right:0; width:min(320px,85vw); height:100vh;
+            background:rgba(10,7,14,0.98); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px);
+            border-left:1px solid var(--border);
+            z-index:1050; transition:transform .32s cubic-bezier(.25,.8,.25,1);
+            display:flex; flex-direction:column; padding:80px 32px 50px;
+            gap:0; transform:translateX(100%); will-change:transform;
         }
-        .mc-inner{width:100%;height:100%;transform-style:preserve-3d;transition:transform .35s;}
-        .mc.flipped .mc-inner,.mc.matched .mc-inner{transform:rotateY(180deg);}
-        .mc-back,.mc-front{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-        .mc-back{background:linear-gradient(135deg,#1a0e12,#0e0b15);font-size:1.2rem;color:rgba(201,168,76,.5);}
-        .mc-front{background:var(--surface);font-size:clamp(1.4rem,5vw,1.9rem);transform:rotateY(180deg);}
-        .mc.matched{border-color:#4CAF50;box-shadow:0 0 8px rgba(76,175,80,.25);}
-        .mc.flash{animation:mcf .4s ease;}
-        @keyframes mcf{0%,100%{border-color:var(--border)}50%{border-color:#ef5350;box-shadow:0 0 10px rgba(239,83,80,.3)}}
+        .nav-drawer.open { transform:translateX(0); }
+        .nav-drawer-link { font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:3px; color:var(--text-muted); text-decoration:none; text-transform:uppercase; padding:16px 0; border-bottom:1px solid rgba(201,168,76,.08); transition:color .2s; display:flex; align-items:center; gap:12px; min-height:52px; -webkit-tap-highlight-color:transparent; }
+        .nav-drawer-link:hover, .nav-drawer-link.active, .nav-drawer-link:active { color:var(--gold); }
+        .nav-drawer-link .nav-drawer-icon { font-size:1.1rem; width:24px; flex-shrink:0; }
+        .nav-drawer-cta { margin-top:auto; display:block; text-align:center; padding:16px; background:var(--gold); color:var(--deep); font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:3px; text-decoration:none; text-transform:uppercase; font-weight:700; -webkit-tap-highlight-color:transparent; }
+        .nav-drawer-cta:active { background:var(--gold-light); }
+        .nav-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1040; opacity:0; pointer-events:none; transition:opacity .32s ease; }
+        .nav-overlay.show { opacity:1; pointer-events:all; }
 
-        /* ── 4. SPELL DUEL ── */
-        .duel-enemies{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
-        .enemy-btn{
-            display:flex;align-items:center;gap:16px;
-            border:1px solid var(--border);background:var(--card);
-            padding:16px 18px;cursor:pointer;text-align:left;border-radius:4px;
-            transition:border-color .2s;-webkit-tap-highlight-color:transparent;min-height:64px;
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh; min-height: 100svh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative; padding: 80px 20px 120px;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(96,0,40,0.18) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0708 0%, #080608 100%);
         }
-        .enemy-btn:active{border-color:var(--gold);}
-        .enemy-btn.boss{border-color:rgba(201,168,76,.35);background:linear-gradient(135deg,#1a0f10,var(--card));}
-        .enemy-emoji{font-size:2rem;flex-shrink:0;}
-        .enemy-info{flex:1;}
-        .enemy-name{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:2px;color:var(--parchment);text-transform:uppercase;margin-bottom:3px;}
-        .enemy-hp-txt{font-size:.85rem;color:var(--muted);font-style:italic;}
-        .enemy-badge{font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:2px;padding:3px 8px;border:1px solid var(--gold);color:var(--gold);text-transform:uppercase;border-radius:2px;white-space:nowrap;}
-        .duel-arena{background:var(--card);border:1px solid var(--border);padding:20px 16px;border-radius:4px;}
-        .duel-arena::before{content:'';display:block;height:3px;background:linear-gradient(to right,transparent,#8B0020,transparent);margin:-20px -16px 20px;}
-        .duel-vs-row{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
-        .dueler{flex:1;text-align:center;}
-        .dueler-name{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
-        .hp-bar{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:5px;}
-        .hp-fill{height:100%;border-radius:4px;transition:width .4s ease;}
-        .hp-num{font-family:'Cinzel Decorative',serif;font-size:1rem;}
-        .vs-badge{font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--gold);opacity:.55;flex-shrink:0;}
-        .duel-prompt{text-align:center;margin-bottom:18px;}
-        .spell-label{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:4px;color:var(--gold);opacity:.65;text-transform:uppercase;margin-bottom:6px;}
-        .spell-word{font-family:'Cinzel Decorative',serif;font-size:clamp(1.2rem,5vw,2rem);color:var(--gold);text-shadow:0 0 18px rgba(201,168,76,.35);word-break:break-all;}
-        .spell-hint{font-style:italic;font-size:.88rem;color:rgba(245,234,214,.45);margin-top:8px;line-height:1.4;letter-spacing:.5px;}
-        .duel-input-row{display:flex;flex-direction:column;gap:10px;align-items:center;margin-bottom:14px;}
-        .duel-input{
-            font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);
-            background:transparent;border:none;border-bottom:2px solid var(--border);
-            width:100%;padding:12px 4px;text-align:center;letter-spacing:4px;
-            outline:none;text-transform:uppercase;-webkit-appearance:none;border-radius:0;
+        .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; background: var(--gold); border-radius: 50%; opacity: 0; animation: float-up linear infinite; }
+        @keyframes float-up { 0%{opacity:0;transform:translateY(0) scale(1)} 10%{opacity:.6} 90%{opacity:.3} 100%{opacity:0;transform:translateY(-100vh) scale(.5)} }
+
+        /* Floating candles */
+        .candle { position: absolute; display: flex; flex-direction: column; align-items: center; animation: candle-float ease-in-out infinite; pointer-events: none; }
+        @keyframes candle-float { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-18px) rotate(1deg)} }
+        .candle-body { width: 8px; border-radius: 2px; background: linear-gradient(180deg, #f5ead6, #d4a96a); }
+        .candle-flame { width: 10px; height: 16px; border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%; background: radial-gradient(ellipse at 50% 60%, #fff 0%, #ffe566 30%, #ffaa00 60%, #ff6600 80%, transparent 100%); margin-bottom: -2px; animation: flicker 0.3s ease-in-out infinite alternate; filter: blur(0.5px); }
+        @keyframes flicker { 0%{transform:scaleX(1) scaleY(1)} 100%{transform:scaleX(0.85) scaleY(1.08)} }
+
+        .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 6px; color: var(--gold); opacity: .8; margin-bottom: 24px; text-transform: uppercase; }
+        .hero-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(2.2rem, 7vw, 5.5rem); color: var(--gold); line-height: 1.1; letter-spacing: 3px; text-shadow: 0 0 40px rgba(201,168,76,.4), 0 0 80px rgba(201,168,76,.15); margin-bottom: 10px; }
+        .hero-title span { display: block; font-size: .45em; font-family: 'Cinzel', serif; letter-spacing: 8px; color: var(--gold-light); margin-bottom: 4px; }
+        .hero-quote { font-style: italic; font-size: clamp(1rem,2vw,1.3rem); color: var(--text-muted); max-width: 500px; margin: 24px auto 44px; line-height: 1.7; }
+        .hero-cta { display: inline-block; padding: 17px 52px; background: transparent; color: var(--gold); border: 1px solid var(--gold); font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 4px; text-decoration: none; text-transform: uppercase; position: relative; transition: all .4s ease; overflow: hidden; }
+        .hero-cta::before { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-100%); transition:transform .4s ease; z-index:-1; }
+        .hero-cta:hover { color: var(--deep); box-shadow: 0 0 40px rgba(201,168,76,.4); }
+        .hero-cta:hover::before { transform:translateX(0); }
+
+        .divider { display:flex; align-items:center; gap:16px; justify-content:center; margin:60px auto 0; max-width:360px; opacity:.35; }
+        .divider-line { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--gold)); }
+        .divider-line:last-child { background:linear-gradient(to left,transparent,var(--gold)); }
+        .divider-diamond { width:8px; height:8px; border:1px solid var(--gold); transform:rotate(45deg); }
+
+        .hero-scroll { position:absolute; bottom:30px; display:flex; flex-direction:column; align-items:center; gap:8px; opacity:.4; animation:bounce 2s ease-in-out infinite; }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+        .hero-scroll span { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; }
+
+        /* ── TEASER BANNER ── */
+        .membership-teaser { background:linear-gradient(135deg,rgba(139,0,32,.15),rgba(201,168,76,.08),rgba(139,0,32,.15)); border-top:1px solid rgba(201,168,76,.15); border-bottom:1px solid rgba(201,168,76,.15); padding:24px 6%; display:flex; align-items:center; justify-content:center; gap:36px; flex-wrap:wrap; }
+        .teaser-text { font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,2vw,1.15rem); color:var(--parchment); }
+        .teaser-text em { color:var(--gold); font-style:normal; font-weight:600; }
+        .teaser-btn { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:3px; color:var(--deep); background:var(--gold); text-decoration:none; text-transform:uppercase; padding:12px 26px; white-space:nowrap; transition:all .3s; box-shadow:0 4px 20px rgba(201,168,76,.3); }
+        .teaser-btn:hover { background:var(--gold-light); transform:translateY(-1px); }
+
+        /* ── SECTIONS ── */
+        .section { padding:80px 0 40px; }
+        .section-header { text-align:center; padding:0 20px; margin-bottom:56px; }
+        .section-label { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:5px; color:var(--gold); opacity:.6; text-transform:uppercase; display:block; margin-bottom:10px; }
+        .section-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.4rem,3vw,2rem); color:var(--parchment); }
+        .section-line { width:60px; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); margin:18px auto 0; }
+        .section-sep { max-width:180px; margin:80px auto 0; text-align:center; color:var(--gold); opacity:.22; font-size:1.2rem; letter-spacing:12px; }
+
+        /* ── SHELF ── */
+        .shelf { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:32px; padding:0 6%; max-width:1400px; margin:0 auto; }
+        .book { position:relative; cursor:none; }
+        .book-poster-wrap { position:relative; border-radius:3px; overflow:hidden; aspect-ratio:2/3; background:var(--card); border:1px solid var(--border); transition:transform .45s cubic-bezier(.25,.8,.25,1), box-shadow .45s ease, border-color .3s ease; }
+        .book:hover .book-poster-wrap { transform:translateY(-10px) rotateY(-8deg) scale(1.02); box-shadow:-12px 20px 50px rgba(0,0,0,.7),0 0 30px rgba(201,168,76,.18); border-color:rgba(201,168,76,.55); }
+        .book-poster-wrap img { width:100%; height:100%; object-fit:cover; display:block; transition:filter .3s; }
+        .book:hover .book-poster-wrap img { filter:brightness(1.06); }
+        .book-poster-wrap::after { content:''; position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(to right,rgba(0,0,0,.6),transparent); }
+        .badge { position:absolute; top:10px; right:10px; background:rgba(96,0,30,.92); border:1px solid var(--gold); color:var(--gold); font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:2px; padding:4px 10px; text-transform:uppercase; backdrop-filter:blur(4px); z-index:5; }
+        .book-lock { position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(8,6,8,.92) 100%); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:18px; opacity:0; transition:opacity .3s; z-index:3; }
+        .book:hover .book-lock, .book:focus .book-lock { opacity:1; }
+        .lock-icon { font-size:1.4rem; margin-bottom:5px; }
+        .lock-text { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:2px; color:var(--gold); text-transform:uppercase; }
+        .lock-btn { margin-top:9px; font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:2px; color:var(--deep); background:var(--gold); text-decoration:none; padding:6px 14px; text-transform:uppercase; transition:background .2s; }
+        .lock-btn:hover { background:var(--gold-light); }
+        /* Preview button */
+        .preview-btn { margin-top:6px; font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:2px; color:var(--gold); background:transparent; border:1px solid var(--gold); text-decoration:none; padding:5px 12px; text-transform:uppercase; transition:all .2s; cursor:none; }
+        .preview-btn:hover { background:rgba(201,168,76,.15); }
+        .book-info { margin-top:13px; padding:0 4px; }
+        .book-title { font-size:1rem; color:var(--parchment); line-height:1.4; font-weight:600; }
+        .book-sub { font-size:.8rem; color:var(--text-muted); font-style:italic; margin-top:3px; }
+        .book-desc { font-size:.82rem; color:var(--text-muted); font-style:italic; margin-top:7px; line-height:1.55; }
+
+        /* ── SORTING HAT ── */
+        #sorting-hat-section { padding:100px 6%; text-align:center; position:relative; }
+        #sorting-hat-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,.06),transparent); pointer-events:none; }
+        .sh-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.8rem,4vw,2.8rem); color:var(--gold); margin-bottom:14px; text-shadow:0 0 30px rgba(201,168,76,.3); }
+        .sh-sub { font-style:italic; font-size:clamp(1rem,1.8vw,1.2rem); color:var(--text-muted); max-width:500px; margin:0 auto 50px; line-height:1.7; }
+        .hat-svg { font-size:7rem; display:block; margin:0 auto 30px; animation:hat-wiggle 3s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(201,168,76,.3)); }
+        @keyframes hat-wiggle { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+        .quiz-box { max-width:620px; margin:0 auto; background:var(--card); border:1px solid var(--border); padding:44px 40px; position:relative; }
+        .quiz-q { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; margin-bottom:10px; opacity:.7; }
+        .quiz-question { font-size:clamp(1.1rem,2vw,1.35rem); color:var(--parchment); line-height:1.6; margin-bottom:32px; font-weight:600; }
+        .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .quiz-opt { background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--parchment); font-family:'Cormorant Garamond',serif; font-size:1rem; padding:14px 18px; text-align:left; cursor:none; transition:all .25s; line-height:1.4; }
+        .quiz-opt:hover { border-color:var(--gold); background:rgba(201,168,76,.1); color:var(--gold); transform:translateY(-2px); }
+        .quiz-progress { display:flex; gap:8px; justify-content:center; margin-bottom:32px; }
+        .quiz-dot { width:8px; height:8px; border-radius:50%; background:var(--border); border:1px solid var(--gold); transition:background .3s; }
+        .quiz-dot.done { background:var(--gold); }
+
+        /* House result card */
+        .house-result { display:none; text-align:center; padding:10px 0; }
+        .house-result.show { display:block; animation:fade-in .6s ease; }
+        @keyframes fade-in { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+        .house-crest { font-size:5rem; margin-bottom:20px; display:block; animation:pulse-crest 2s ease-in-out infinite; }
+        @keyframes pulse-crest { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+        .house-name { font-family:'Cinzel Decorative',serif; font-size:2.4rem; margin-bottom:10px; }
+        .house-motto { font-style:italic; font-size:1.1rem; color:var(--text-muted); margin-bottom:28px; }
+        .house-traits { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:30px; }
+        .house-trait { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:2px; padding:6px 16px; border:1px solid currentColor; text-transform:uppercase; }
+        .retake-btn { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:3px; color:var(--text-muted); background:transparent; border:1px solid var(--border); padding:10px 24px; cursor:none; transition:all .3s; text-transform:uppercase; }
+        .retake-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+        /* ── GAMES CROWD PROMO ── */
+        #games-crowd-section { padding:80px 6%; text-align:center; position:relative; }
+        #games-crowd-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,.05), transparent); pointer-events:none; }
+        .crowd-inner { max-width:900px; margin:0 auto; position:relative; }
+        .crowd-eyebrow { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:5px; color:var(--gold); opacity:.7; text-transform:uppercase; margin-bottom:16px; display:block; }
+        .crowd-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.6rem,4vw,2.6rem); color:var(--parchment); margin-bottom:14px; line-height:1.2; }
+        .crowd-title em { color:var(--gold); font-style:normal; }
+        .crowd-sub { font-style:italic; font-size:clamp(1rem,2vw,1.15rem); color:var(--text-muted); max-width:480px; margin:0 auto 44px; line-height:1.7; }
+        .games-promo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-bottom:44px; }
+        .game-promo-card { background:var(--card); border:1px solid var(--border); padding:28px 20px; text-align:center; transition:border-color .3s, transform .3s; text-decoration:none; display:block; }
+        .game-promo-card:hover { border-color:rgba(201,168,76,.5); transform:translateY(-4px); }
+        .game-promo-icon { font-size:2.2rem; display:block; margin-bottom:12px; }
+        .game-promo-name { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+        .game-promo-desc { font-size:.88rem; color:var(--text-muted); font-style:italic; line-height:1.5; }
+        .snitch-reward-strip { background:linear-gradient(135deg, rgba(201,168,76,.08), rgba(139,0,32,.1), rgba(201,168,76,.08)); border:1px solid rgba(201,168,76,.25); padding:22px 28px; display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:36px; }
+        .snitch-strip-icon { font-size:1.8rem; flex-shrink:0; }
+        .snitch-strip-text { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:3px; color:var(--parchment); text-transform:uppercase; text-align:left; }
+        .snitch-strip-text strong { color:var(--gold); display:block; font-size:.75rem; margin-bottom:3px; }
+
+        /* ── VOLDEMORT DUEL CTA ── */
+        #duel-cta-section { padding:90px 6%; position:relative; overflow:hidden; }
+        #duel-cta-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 70% at 50% 50%, rgba(139,0,32,.18), transparent 70%); pointer-events:none; }
+        #duel-cta-section::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,rgba(139,0,32,.6),transparent); }
+        .duel-cta-inner { max-width:720px; margin:0 auto; text-align:center; position:relative; }
+        .duel-vs-display { display:flex; align-items:center; justify-content:center; gap:24px; margin-bottom:36px; }
+        .duel-vs-you { font-size:4rem; filter:drop-shadow(0 0 16px rgba(201,168,76,.4)); animation:hero-pulse 3s ease-in-out infinite; }
+        .duel-vs-sep { font-family:'Cinzel Decorative',serif; font-size:1.4rem; color:var(--crimson-light); opacity:.8; }
+        .duel-vs-enemy { font-size:4rem; filter:drop-shadow(0 0 16px rgba(139,0,32,.5)); animation:villain-pulse 3s ease-in-out infinite; animation-delay:.5s; }
+        @keyframes hero-pulse { 0%,100%{transform:scale(1) translateX(0)} 50%{transform:scale(1.08) translateX(4px)} }
+        @keyframes villain-pulse { 0%,100%{transform:scale(1) translateX(0)} 50%{transform:scale(1.08) translateX(-4px)} }
+        .duel-cta-eyebrow { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:5px; color:var(--crimson-light); text-transform:uppercase; margin-bottom:14px; display:block; }
+        .duel-cta-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.6rem,4vw,2.6rem); color:var(--parchment); line-height:1.2; margin-bottom:14px; }
+        .duel-cta-title em { color:var(--gold); font-style:normal; }
+        .duel-cta-sub { font-style:italic; font-size:clamp(1rem,2vw,1.15rem); color:var(--text-muted); max-width:460px; margin:0 auto 20px; line-height:1.7; }
+        .duel-reward-badge { display:inline-flex; align-items:center; gap:12px; background:rgba(201,168,76,.08); border:1px solid rgba(201,168,76,.35); padding:12px 24px; margin-bottom:36px; }
+        .duel-reward-badge-icon { font-size:1.3rem; }
+        .duel-reward-badge-text { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; text-align:left; }
+        .duel-reward-badge-text span { display:block; font-size:.5rem; color:var(--text-muted); margin-top:2px; }
+        .duel-challenge-btn { display:inline-flex; align-items:center; gap:12px; padding:18px 48px; background:linear-gradient(135deg,var(--crimson),#a0002a,var(--crimson)); background-size:200% 100%; color:var(--parchment); font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:3px; text-decoration:none; text-transform:uppercase; font-weight:700; border:1px solid rgba(201,168,76,.3); transition:all .35s; animation:crimson-shimmer 3s ease-in-out infinite; }
+        @keyframes crimson-shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        .duel-challenge-btn:hover { box-shadow:0 0 40px rgba(139,0,32,.5); transform:translateY(-2px); border-color:rgba(201,168,76,.6); }
+        .duel-stats-row { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-top:44px; padding-top:36px; border-top:1px solid var(--border); }
+        .duel-stat { text-align:center; }
+        .duel-stat-num { font-family:'Cinzel Decorative',serif; font-size:1.8rem; color:var(--gold); display:block; line-height:1; }
+        .duel-stat-lbl { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:3px; color:var(--text-muted); text-transform:uppercase; margin-top:5px; display:block; }
+
+        /* ── DAILY TRIVIA ── */
+        #trivia-section { padding:90px 6%; }
+        .trivia-inner { max-width:680px; margin:0 auto; }
+        .trivia-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:4px; color:var(--gold); border:1px solid var(--gold); padding:6px 18px; text-transform:uppercase; margin-bottom:24px; animation:pulse-border 2s ease-in-out infinite; }
+        @keyframes pulse-border { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0)} 50%{box-shadow:0 0 0 5px rgba(201,168,76,.12)} }
+        .trivia-q { font-family:'Cinzel Decorative',serif; font-size:clamp(1.3rem,3vw,1.8rem); color:var(--parchment); line-height:1.4; margin-bottom:30px; }
+        .trivia-options { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
+        .trivia-opt { background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--parchment); font-family:'Cormorant Garamond',serif; font-size:1.05rem; padding:14px 22px; text-align:left; cursor:none; transition:all .25s; }
+        .trivia-opt:hover:not(.disabled) { border-color:var(--gold); background:rgba(201,168,76,.1); transform:translateX(6px); }
+        .trivia-opt.correct { border-color:#4CAF50; background:rgba(76,175,80,.15); color:#a5d6a7; }
+        .trivia-opt.wrong { border-color:#ef5350; background:rgba(239,83,80,.12); color:#ef9a9a; }
+        .trivia-opt.disabled { cursor:not-allowed; }
+        .trivia-result { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:3px; text-transform:uppercase; padding:16px 20px; margin-bottom:20px; display:none; }
+        .trivia-result.show { display:block; animation:fade-in .4s ease; }
+        .trivia-result.right { background:rgba(76,175,80,.15); border:1px solid #4CAF50; color:#a5d6a7; }
+        .trivia-result.wrong { background:rgba(239,83,80,.1); border:1px solid #ef5350; color:#ef9a9a; }
+        .trivia-streak { display:flex; align-items:center; gap:10px; margin-bottom:30px; }
+        .streak-flame { font-size:1.4rem; }
+        .streak-text { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; }
+        .streak-num { font-family:'Cinzel Decorative',serif; font-size:1.5rem; color:var(--gold); }
+        .trivia-next { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:3px; color:var(--deep); background:var(--gold); border:none; padding:12px 28px; cursor:none; text-transform:uppercase; display:none; transition:all .3s; }
+        .trivia-next.show { display:inline-block; }
+        .trivia-next:hover { background:var(--gold-light); }
+
+
+
+        /* ── BOOK PREVIEW MODAL ── */
+        #preview-modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.85);
+            backdrop-filter: blur(10px);
+            z-index: 9000;
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 20px;
         }
-        .duel-input:focus{border-bottom-color:var(--gold);}
-        .cast-btn{width:100%;}
-        .duel-log{max-height:120px;overflow-y:auto;padding:12px 14px;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.1);font-style:italic;font-size:.88rem;color:var(--muted);line-height:1.8;border-radius:2px;}
-        .duel-log::-webkit-scrollbar{width:3px;} .duel-log::-webkit-scrollbar-thumb{background:var(--gold-dark);}
-        .dl{animation:fadeUp .3s ease;} .dl.hit{color:#ffcc80;} .dl.heal{color:#a5d6a7;} .dl.bad{color:#ef9a9a;}
-
-        /* ══ FOOTER ══ */
-        .games-footer{border-top:1px solid var(--border);padding:40px 16px calc(40px + var(--safe-bottom));text-align:center;margin-top:30px;}
-        .gf-brand{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);margin-bottom:6px;}
-        .gf-copy{font-size:.82rem;color:var(--muted);}
-
-        /* ══ DESKTOP UPGRADES ══ */
-        @media(min-width:640px){
-            :root{--nav-h:62px;}
-            nav{padding:0 5%;}
-            .hamburger{display:none;}
-            .nav-links{display:flex;align-items:center;gap:22px;}
-            .nav-link{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:3px;color:var(--muted);text-decoration:none;text-transform:uppercase;transition:color .2s;}
-            .nav-link:hover,.nav-link.active{color:var(--gold);}
-            .nav-cta{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:2px;color:var(--deep);background:var(--gold);text-decoration:none;text-transform:uppercase;padding:9px 18px;font-weight:700;transition:background .2s;}
-            .nav-cta:hover{background:var(--gold-light);}
-
-            .tabs-wrap{padding:32px 24px 0;overflow-x:visible;}
-            .tabs-bar{display:flex;min-width:auto;border:none;border-radius:0;border-bottom:1px solid var(--border);}
-            .tab-btn{font-size:.6rem;letter-spacing:3px;padding:14px 26px;border:1px solid transparent;border-bottom:1px solid var(--border);border-radius:0;background:none;color:var(--muted);}
-            .tab-btn.active{color:var(--gold);border:1px solid var(--border);border-bottom:1px solid var(--deep);background:var(--card);margin-bottom:-1px;}
-            .tab-btn:active:not(.active){background:transparent;}
-
-            .game-wrap{padding:48px 24px 80px;}
-            .tq-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-            .tq-opt{min-height:auto;}
-            .scr-input-wrap{flex-direction:row;}
-            .scr-input{width:220px;}
-            .scr-cast-btn{width:auto;}
-            .duel-enemies{flex-direction:row;flex-wrap:wrap;}
-            .enemy-btn{flex:1;min-width:180px;}
-            .duel-input-row{flex-direction:row;}
-            .duel-input{width:260px;}
-            .cast-btn{width:auto;}
-            .mm-grid{max-width:440px;gap:12px;}
+        #preview-modal.open { display: flex; animation: fade-in .3s ease; }
+        .modal-scroll {
+            background: linear-gradient(135deg, #1a1008, #120d18);
+            border: 1px solid rgba(201,168,76,.4);
+            max-width: 680px; width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 52px 48px;
         }
-        @media(min-width:900px){
-            .page-title{font-size:3rem;}
+        .modal-scroll::-webkit-scrollbar { width: 4px; }
+        .modal-scroll::-webkit-scrollbar-track { background: transparent; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+        .modal-close { position:absolute; top:18px; right:22px; background:none; border:none; color:var(--gold); font-size:1.5rem; cursor:none; opacity:.7; transition:opacity .2s; }
+        .modal-close:hover { opacity:1; }
+        .modal-eyebrow { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:5px; color:var(--gold); opacity:.7; text-transform:uppercase; margin-bottom:10px; }
+        .modal-title { font-family:'Cinzel Decorative',serif; font-size:clamp(1.5rem,4vw,2.2rem); color:var(--gold); margin-bottom:6px; line-height:1.2; }
+        .modal-author { font-style:italic; color:var(--text-muted); font-size:1rem; margin-bottom:24px; }
+        .modal-divider { height:1px; background:linear-gradient(to right,transparent,rgba(201,168,76,.4),transparent); margin:24px 0; }
+        .modal-preview-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:4px; color:var(--gold); opacity:.6; text-transform:uppercase; margin-bottom:14px; }
+        .modal-text { font-size:1.05rem; line-height:1.85; color:var(--parchment); opacity:.9; }
+        .modal-text p { margin-bottom:1em; }
+        .modal-cta { display:block; text-align:center; margin-top:36px; padding:16px 24px; background:var(--gold); color:var(--deep); font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:3px; text-decoration:none; text-transform:uppercase; font-weight:700; transition:all .3s; }
+        .modal-cta:hover { background:var(--gold-light); }
+
+        /* ── HOGWARTS LETTER ANIMATION ── */
+        #letter-overlay {
+            position:fixed; inset:0;
+            background:rgba(0,0,0,.95);
+            z-index:99000;
+            display:none;
+            align-items:center; justify-content:center;
+            flex-direction:column;
+        }
+        #letter-overlay.fly { display:flex; }
+        .letter-env { font-size:5rem; animation:letter-fly 1.8s ease-in-out forwards; }
+        @keyframes letter-fly {
+            0%   { transform:translate(-200px,200px) rotate(-20deg) scale(.5); opacity:0; }
+            40%  { transform:translate(0,0) rotate(0deg) scale(1.2); opacity:1; }
+            70%  { transform:translate(0,0) rotate(0deg) scale(1); opacity:1; }
+            100% { transform:translate(200px,-200px) rotate(20deg) scale(.5); opacity:0; }
+        }
+        .letter-text { font-family:'Cinzel Decorative',serif; font-size:1.4rem; color:var(--gold); margin-top:20px; opacity:0; animation:letter-text-show 1.8s ease-in-out forwards; text-align:center; }
+        @keyframes letter-text-show { 0%,30%{opacity:0} 50%,70%{opacity:1} 100%{opacity:0} }
+
+        /* ── MEMBERSHIP SECTION ── */
+        .membership-teaser { background:linear-gradient(135deg,rgba(139,0,32,.15),rgba(201,168,76,.08),rgba(139,0,32,.15)); border-top:1px solid rgba(201,168,76,.15); border-bottom:1px solid rgba(201,168,76,.15); padding:24px 6%; display:flex; align-items:center; justify-content:center; gap:36px; flex-wrap:wrap; }
+        .perks-strip { background:linear-gradient(180deg,transparent,rgba(201,168,76,.04) 50%,transparent); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:60px 6%; }
+        .perks-strip-title { text-align:center; font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:5px; color:var(--gold); opacity:.7; text-transform:uppercase; margin-bottom:46px; }
+        .perks-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:28px; max-width:960px; margin:0 auto; }
+        .perk-card { text-align:center; padding:30px 18px; border:1px solid var(--border); background:var(--card); transition:border-color .3s,transform .3s; }
+        .perk-card:hover { border-color:rgba(201,168,76,.5); transform:translateY(-4px); }
+        .perk-card-icon { font-size:1.9rem; margin-bottom:14px; display:block; }
+        .perk-card-title { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:9px; }
+        .perk-card-desc { font-size:.88rem; color:var(--text-muted); font-style:italic; line-height:1.6; }
+        .membership-section { margin:100px 0; position:relative; overflow:hidden; }
+        .membership-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 100% 80% at 50% 50%,rgba(139,0,32,.22),transparent 70%); }
+        .membership-section::after { content:''; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); }
+        .membership-inner { position:relative; max-width:1100px; margin:0 auto; padding:100px 6%; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+        .membership-eyebrow { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:5px; color:var(--crimson-light); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+        .membership-eyebrow::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--crimson-light),transparent); max-width:60px; }
+        .membership-heading { font-family:'Cinzel Decorative',serif; font-size:clamp(1.8rem,4vw,2.8rem); color:var(--parchment); line-height:1.2; margin-bottom:8px; }
+        .membership-heading em { color:var(--gold); font-style:normal; display:block; }
+        .membership-subhead { font-size:clamp(1rem,1.5vw,1.15rem); color:var(--text-muted); font-style:italic; line-height:1.7; margin:18px 0 36px; max-width:420px; }
+        .perks-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-bottom:42px; }
+        .perks-list li { display:flex; align-items:flex-start; gap:14px; font-size:1rem; color:var(--parchment); line-height:1.5; }
+        .perk-icon { width:26px; height:26px; border:1px solid rgba(201,168,76,.4); display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0; margin-top:2px; color:var(--gold); }
+        .perk-label { font-weight:600; }
+        .perk-desc { font-size:.88rem; color:var(--text-muted); font-style:italic; }
+        .membership-cta-group { display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+        .btn-primary { display:inline-flex; align-items:center; gap:10px; padding:17px 42px; background:var(--gold); color:var(--deep); font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:3px; text-decoration:none; text-transform:uppercase; font-weight:700; transition:all .35s ease; position:relative; overflow:hidden; box-shadow:0 8px 30px rgba(201,168,76,.35); }
+        .btn-primary::before { content:''; position:absolute; inset:0; background:var(--gold-light); transform:translateX(-100%); transition:transform .35s ease; }
+        .btn-primary:hover { box-shadow:0 12px 40px rgba(201,168,76,.55); transform:translateY(-2px); }
+        .btn-primary:hover::before { transform:translateX(0); }
+        .btn-primary span { position:relative; z-index:1; }
+        .btn-secondary { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:3px; color:var(--text-muted); text-decoration:none; text-transform:uppercase; border-bottom:1px solid rgba(245,234,214,.2); padding-bottom:2px; transition:color .2s,border-color .2s; }
+        .btn-secondary:hover { color:var(--gold); border-color:var(--gold); }
+        .membership-card { background:linear-gradient(135deg,#1a0f10,#0f0a14,#1a0f10); border:1px solid rgba(201,168,76,.3); padding:46px 38px; position:relative; overflow:hidden; }
+        .membership-card::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,.1),transparent 70%); }
+        .card-inner { position:relative; z-index:1; }
+        .card-badge { display:inline-block; background:var(--crimson); border:1px solid rgba(201,168,76,.4); color:var(--gold); font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:3px; padding:5px 14px; text-transform:uppercase; margin-bottom:26px; animation:pulse-border 2s ease-in-out infinite; }
+        .card-price { font-family:'Cinzel Decorative',serif; font-size:3.2rem; color:var(--gold); line-height:1; text-shadow:0 0 30px rgba(201,168,76,.3); }
+        .card-price sup { font-size:1.1rem; vertical-align:super; }
+        .card-price sub { font-size:.95rem; font-family:'Cinzel',serif; letter-spacing:2px; color:var(--text-muted); }
+        .card-period { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:4px; color:var(--text-muted); text-transform:uppercase; margin:8px 0 28px; }
+        .card-divider { height:1px; background:linear-gradient(to right,transparent,rgba(201,168,76,.3),transparent); margin:26px 0; }
+        .card-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+        .card-features li { display:flex; align-items:center; gap:11px; font-size:.93rem; color:var(--parchment); }
+        .card-features li .check { color:var(--gold); font-size:.78rem; font-weight:bold; }
+        .card-cta { display:block; text-align:center; padding:15px; background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--gold-dark)); background-size:200% 100%; color:var(--deep); font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:3px; text-decoration:none; text-transform:uppercase; font-weight:700; transition:all .4s ease; animation:shimmer 3s ease-in-out infinite; }
+        @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        .card-cta:hover { box-shadow:0 8px 30px rgba(201,168,76,.5); transform:translateY(-2px); }
+        .card-note { text-align:center; margin-top:12px; font-size:.75rem; color:var(--text-muted); font-style:italic; }
+        .coming-soon { text-align:center; padding:80px 20px; font-style:italic; font-size:clamp(1rem,2vw,1.35rem); color:var(--text-muted); }
+        .coming-soon::before,.coming-soon::after { content:'✦'; color:var(--gold); opacity:.4; margin:0 14px; }
+        .final-cta { margin:40px 6% 100px; padding:80px 60px; background:linear-gradient(135deg,#130810,#0a0510,#130810); border:1px solid rgba(201,168,76,.25); text-align:center; position:relative; overflow:hidden; }
+        .final-cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(201,168,76,.06),transparent); }
+        .final-cta .corner-tl { position:absolute; top:16px; left:16px; border-top:1px solid var(--gold); border-left:1px solid var(--gold); width:28px; height:28px; opacity:.6; }
+        .final-cta .corner-tr { position:absolute; top:16px; right:16px; border-top:1px solid var(--gold); border-right:1px solid var(--gold); width:28px; height:28px; opacity:.6; }
+        .final-cta .corner-bl { position:absolute; bottom:16px; left:16px; border-bottom:1px solid var(--gold); border-left:1px solid var(--gold); width:28px; height:28px; opacity:.6; }
+        .final-cta .corner-br { position:absolute; bottom:16px; right:16px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); width:28px; height:28px; opacity:.6; }
+        .final-cta-inner { position:relative; z-index:1; }
+        .final-cta-heading { font-family:'Cinzel Decorative',serif; font-size:clamp(1.5rem,4vw,2.6rem); color:var(--gold); margin-bottom:14px; text-shadow:0 0 40px rgba(201,168,76,.2); }
+        .final-cta-sub { font-size:clamp(1rem,2vw,1.2rem); color:var(--text-muted); font-style:italic; max-width:480px; margin:0 auto 40px; line-height:1.7; }
+        .final-cta-btns { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+        footer { border-top:1px solid var(--border); padding:60px 20px; text-align:center; }
+        .footer-logo { font-family:'Cinzel Decorative',serif; font-size:1.35rem; color:var(--gold); margin-bottom:14px; }
+        .footer-tagline { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:5px; color:var(--gold); opacity:.4; text-transform:uppercase; margin-bottom:28px; }
+        .footer-copy { font-size:.85rem; color:var(--text-muted); }
+        .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease,transform .7s ease; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        .reveal-delay-1 { transition-delay:.1s; }
+        .reveal-delay-2 { transition-delay:.2s; }
+        .reveal-delay-3 { transition-delay:.3s; }
+
+        /* ── MOBILE ── */
+        @media (hover:none) {
+            body { cursor: auto; }
+            #cursor, #cursor-dot { display:none; }
+            .book { cursor: pointer; }
+            .quiz-opt, .trivia-opt, .preview-btn, .lock-btn, .retake-btn, .trivia-next, .modal-close { cursor: pointer; }
+            .book-lock { opacity:1; background:linear-gradient(180deg,transparent 45%,rgba(8,6,8,.88) 100%); }
+        }
+        @media (max-width:900px) {
+            .membership-inner { grid-template-columns:1fr; gap:50px; padding:70px 6%; }
+        }
+        @media (max-width:640px) {
+            nav { padding:13px 4%; }
+            .nav-brand { font-size:.75rem; }
+            .nav-right { gap:12px; }
+            .nav-right .nav-link, .nav-right .nav-cta { display:none; }
+            .hamburger { display:flex; }
+            .hero { padding:80px 18px 100px; }
+            .hero-title { font-size:clamp(1.9rem,10vw,2.8rem); }
+            .hero-cta { padding:14px 28px; font-size:.62rem; width:100%; max-width:290px; text-align:center; }
+            .membership-teaser { flex-direction:column; gap:14px; padding:22px 5%; text-align:center; }
+            .teaser-btn { width:100%; text-align:center; }
+            .shelf { grid-template-columns:repeat(2,1fr); gap:14px; padding:0 4%; }
+            .quiz-options { grid-template-columns:1fr; }
+            .modal-scroll { padding:40px 24px; }
+            .membership-inner { padding:60px 5%; }
+            .final-cta { margin:30px 4% 70px; padding:50px 22px; }
+            .final-cta-btns { flex-direction:column; align-items:center; }
+            .final-cta-btns .btn-primary { width:100%; max-width:300px; justify-content:center; }
+            .perks-grid { grid-template-columns:repeat(2,1fr); gap:14px; }
+            .games-promo-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+            .game-promo-card { padding:20px 14px; }
+            .snitch-reward-strip { flex-direction:column; gap:12px; text-align:center; }
+            .snitch-strip-text { text-align:center; }
+            .duel-vs-you, .duel-vs-enemy { font-size:3rem; }
+            .duel-stats-row { gap:20px; }
+            .duel-challenge-btn { padding:15px 20px; font-size:.6rem; width:100%; justify-content:center; }
+            #duel-cta-section > .duel-cta-inner > div:last-of-type { flex-direction:column; align-items:center; }
+        }
+        @media (max-width:380px) {
+            .shelf { gap:10px; }
+            .book-title { font-size:.85rem; }
+            .book-desc { font-size:.72rem; }
+            .games-promo-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
+
+<!-- LETTER OVERLAY -->
+<div id="letter-overlay">
+    <div class="letter-env">✉️</div>
+    <div class="letter-text">Your Hogwarts membership awaits…</div>
+</div>
+
+<!-- BOOK PREVIEW MODAL -->
+<div id="preview-modal">
+    <div class="modal-scroll">
+        <button class="modal-close" id="modal-close-btn">✕</button>
+        <div class="modal-eyebrow">First Chapter · Preview</div>
+        <div class="modal-title" id="modal-book-title"></div>
+        <div class="modal-author" id="modal-book-author"></div>
+        <div class="modal-divider"></div>
+        <div class="modal-preview-label">An Excerpt</div>
+        <div class="modal-text" id="modal-book-text"></div>
+        <a href="https://tinyurl.com/ElibraryDarshMembership" class="modal-cta" target="_blank">✦ Join to Read the Full Book</a>
+    </div>
+</div>
+
+<!-- NAV OVERLAY -->
 <div class="nav-overlay" id="nav-overlay"></div>
+
+<!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="nav-drawer">
-    <a class="nav-drawer-link" href="index.html"><span class="nav-di">📚</span>Library</a>
-    <a class="nav-drawer-link" href="index.html#collections"><span class="nav-di">🗂️</span>Collections</a>
-    <a class="nav-drawer-link" href="index.html#sorting-hat-section"><span class="nav-di">🎩</span>Sorting Hat</a>
-    <a class="nav-drawer-link" href="index.html#trivia-section"><span class="nav-di">⚡</span>Daily Trivia</a>
-    <a class="nav-drawer-link active" href="games.html"><span class="nav-di">🎮</span>Games & Quizzes</a>
+    <a class="nav-drawer-link" href="index.html"><span class="nav-drawer-icon">📚</span>Library</a>
+    <a class="nav-drawer-link" href="#collections"><span class="nav-drawer-icon">🗂️</span>Collections</a>
+    <a class="nav-drawer-link" href="#sorting-hat-section"><span class="nav-drawer-icon">🎩</span>Sorting Hat</a>
+    <a class="nav-drawer-link" href="games.html"><span class="nav-drawer-icon">⚡</span>Trivia & Games</a>
+    <a class="nav-drawer-link active" href="games.html"><span class="nav-drawer-icon">🎮</span>Games & Quizzes</a>
     <a class="nav-drawer-cta" href="https://tinyurl.com/ElibraryDarshMembership" target="_blank">✦ Join Now — ₹99/mo</a>
 </div>
+
+<!-- NAV -->
 <nav id="nav">
-    <a class="nav-brand" href="index.html">E·Library</a>
-    <div class="nav-links">
-        <a class="nav-link" href="index.html">Library</a>
-        <a class="nav-link" href="index.html#collections">Collections</a>
-        <a class="nav-link active" href="games.html">🎮 Games</a>
-        <a class="nav-cta" href="https://tinyurl.com/ElibraryDarshMembership" target="_blank">Join Now</a>
+    <a class="nav-brand" href="index.html">E·Library by Darsh</a>
+    <div class="nav-right">
+        <a class="nav-link" href="#collections">Collections</a>
+        <a class="nav-link" href="#sorting-hat-section">Sorting Hat</a>
+        <a class="nav-link" href="games.html">⚡ Trivia</a>
+        <a class="nav-link" href="games.html">🎮 Games</a>
+        <a class="nav-cta" id="join-btn" href="https://tinyurl.com/ElibraryDarshMembership" target="_blank">Join Now</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
     </button>
 </nav>
 
-<!-- ══ HERO ══ -->
-<header class="page-hero">
-    <p class="eyebrow">Wizarding World · Fun Zone</p>
-    <h1 class="page-title">🎮 Games & Quizzes</h1>
-    <p class="page-sub">Test your wizarding knowledge, scramble spells, match magical symbols and duel dark wizards!</p>
+<!-- HERO -->
+<header class="hero">
+    <div class="particles" id="particles"></div>
+    <!-- Floating candles -->
+    <div class="candle" style="position:absolute;left:8%;top:20%;animation-duration:4s;animation-delay:0s"><div class="candle-flame"></div><div class="candle-body" style="height:50px"></div></div>
+    <div class="candle" style="position:absolute;left:15%;top:55%;animation-duration:5s;animation-delay:1s"><div class="candle-flame"></div><div class="candle-body" style="height:40px"></div></div>
+    <div class="candle" style="position:absolute;right:10%;top:25%;animation-duration:4.5s;animation-delay:.5s"><div class="candle-flame"></div><div class="candle-body" style="height:55px"></div></div>
+    <div class="candle" style="position:absolute;right:18%;top:65%;animation-duration:3.8s;animation-delay:2s"><div class="candle-flame"></div><div class="candle-body" style="height:38px"></div></div>
+    <div class="candle" style="position:absolute;left:50%;top:10%;animation-duration:5.2s;animation-delay:.8s"><div class="candle-flame"></div><div class="candle-body" style="height:45px"></div></div>
+
+    <p class="hero-eyebrow">E-Library by Darsh Mulgaonkar</p>
+    <h1 class="hero-title"><span>E-Library by</span>Darsh Mulgaonkar</h1>
+    <p class="hero-quote">"The stories we love best do live in us forever."</p>
+    <a href="#" class="hero-cta" id="hero-join-btn">Unlock the Restricted Section</a>
+    <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-diamond"></div><div class="divider-diamond"></div><div class="divider-diamond"></div>
+        <div class="divider-line"></div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
 </header>
 
-<!-- ══ TABS ══ -->
-<div class="tabs-wrap">
-    <div class="tabs-bar">
-        <button class="tab-btn active" id="tab-trivia-blitz" onclick="switchTab('trivia-blitz')"><span class="tab-icon">⚡</span>Trivia</button>
-        <button class="tab-btn" id="tab-spell-scramble" onclick="switchTab('spell-scramble')"><span class="tab-icon">🔤</span>Scramble</button>
-        <button class="tab-btn" id="tab-memory-match" onclick="switchTab('memory-match')"><span class="tab-icon">🃏</span>Memory</button>
-        <button class="tab-btn" id="tab-spell-duel" onclick="switchTab('spell-duel')"><span class="tab-icon">⚔️</span>Duel</button>
-    </div>
-</div>
-<div class="tabs-content">
-
-<!-- ════════ 1. TRIVIA BLITZ ════════ -->
-<div class="tab-panel active" id="panel-trivia-blitz">
-<div class="game-wrap">
-    <h2 class="game-title">⚡ Trivia Blitz</h2>
-    <p class="game-desc">10 questions with a timer — how many can you get right?</p>
-
-    <div id="tb-start">
-        <div style="text-align:center;padding:16px 0 24px">
-            <div style="font-size:4rem;margin-bottom:16px">🏆</div>
-            <div style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:18px">Choose difficulty</div>
-            <div class="diff-row">
-                <button class="diff-btn" onclick="startTrivia('easy')">🟢<br>Easy</button>
-                <button class="diff-btn sel" onclick="startTrivia('medium')">🟡<br>Medium</button>
-                <button class="diff-btn" onclick="startTrivia('hard')">🔴<br>Hard</button>
-            </div>
-            <div id="tb-best" style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase"></div>
-        </div>
-    </div>
-
-    <div id="tb-game" style="display:none">
-        <div class="score-board">
-            <div class="score-item"><div class="score-val" id="tb-score">0</div><div class="score-lbl">Score</div></div>
-            <div class="score-item"><div class="score-val" id="tb-streak">0</div><div class="score-lbl">🔥 Streak</div></div>
-            <div class="score-item"><div class="score-val" id="tb-qnum">1/10</div><div class="score-lbl">Question</div></div>
-        </div>
-        <div class="tq-progress" id="tb-progress"></div>
-        <div class="trivia-card">
-            <div class="tq-timer-bar"><div class="tq-timer-fill" id="tb-timer-fill" style="width:100%"></div></div>
-            <div class="tq-cat" id="tb-cat"></div>
-            <div class="tq-q" id="tb-q"></div>
-            <div class="tq-opts" id="tb-opts"></div>
-            <div class="tq-fb" id="tb-fb"></div>
-        </div>
-    </div>
-
-    <div id="tb-result" style="display:none">
-        <div class="result-card">
-            <span class="r-emoji" id="tb-r-emoji"></span>
-            <div class="r-title" id="tb-r-title"></div>
-            <div class="r-sub" id="tb-r-sub"></div>
-            <span class="r-score" id="tb-r-score"></span>
-            <span class="r-max">out of 100 points</span>
-            <div class="r-btns">
-                <button class="gold-btn" onclick="startTrivia(tbDiff)">Play Again</button>
-                <button class="ghost-btn" onclick="showTBStart()">Change Difficulty</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- TEASER BANNER -->
+<div class="membership-teaser">
+    <p class="teaser-text">🔒 <em>All collections</em> are members-only — Unlock the entire library for just <em>₹99/month</em></p>
+    <a href="#" class="teaser-btn join-trigger">Get Instant Access →</a>
 </div>
 
-<!-- ════════ 2. SPELL SCRAMBLE ════════ -->
-<div class="tab-panel" id="panel-spell-scramble">
-<div class="game-wrap">
-    <h2 class="game-title">🔤 Spell Scramble</h2>
-    <p class="game-desc">A Niffler scrambled the letters! Unscramble the spell or wizarding word.</p>
-    <div class="score-board">
-        <div class="score-item"><div class="score-val" id="ss-score">0</div><div class="score-lbl">Score</div></div>
-        <div class="score-item"><div class="score-val" id="ss-solved">0</div><div class="score-lbl">Solved</div></div>
-        <div class="score-item"><div class="score-val" id="ss-lives">❤️❤️❤️</div><div class="score-lbl">Lives</div></div>
-    </div>
-    <div id="ss-game">
-        <div class="scr-cat" id="ss-cat">Spell</div>
-        <div class="scr-word" id="ss-word">LUMOS</div>
-        <div class="scr-hint" id="ss-hint"></div>
-        <div class="scr-input-wrap">
-            <input class="scr-input" id="ss-input" placeholder="TYPE ANSWER" maxlength="22" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
-            <button class="gold-btn scr-cast-btn" onclick="checkScramble()">Cast ✨</button>
-        </div>
-        <div class="scr-fb" id="ss-fb"></div>
-        <button class="scr-skip" onclick="skipScramble()">Skip this one →</button>
-    </div>
-    <div id="ss-over" style="display:none">
-        <div class="result-card">
-            <span class="r-emoji">💀</span>
-            <div class="r-title">All Lives Lost!</div>
-            <div class="r-sub">The Dark Arts have defeated you this time…</div>
-            <span class="r-score" id="ss-final"></span>
-            <span class="r-max">words unscrambled</span>
-            <button class="gold-btn" onclick="resetScramble()" style="margin-top:16px">Try Again</button>
-        </div>
-    </div>
-</div>
-</div>
+<main>
+<div id="collections"></div>
 
-<!-- ════════ 3. MEMORY MATCH ════════ -->
-<div class="tab-panel" id="panel-memory-match">
-<div class="game-wrap">
-    <h2 class="game-title">🃏 Memory Match</h2>
-    <p class="game-desc">Find all 8 pairs of magical symbols. Don't let the Boggart confuse you!</p>
-    <div class="score-board">
-        <div class="score-item"><div class="score-val" id="mm-moves">0</div><div class="score-lbl">Moves</div></div>
-        <div class="score-item"><div class="score-val" id="mm-pairs">0/8</div><div class="score-lbl">Pairs</div></div>
-        <div class="score-item"><div class="score-val" id="mm-time">0:00</div><div class="score-lbl">Time</div></div>
+<!-- ══ COLLECTION I ══ -->
+<section class="section">
+    <div class="section-header">
+        <span class="section-label">Collection I</span>
+        <h2 class="section-title">The Wizarding Archive</h2>
+        <div class="section-line"></div>
     </div>
-    <div class="mm-grid" id="mm-grid"></div>
-    <div style="text-align:center"><button class="ghost-btn" onclick="resetMemory()">New Game</button></div>
-    <div id="mm-win" style="display:none;margin-top:24px">
-        <div class="result-card">
-            <span class="r-emoji">🏆</span>
-            <div class="r-title">Excellent Memory!</div>
-            <div class="r-sub" id="mm-win-sub"></div>
-            <div class="r-btns"><button class="gold-btn" onclick="resetMemory()">Play Again</button></div>
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- ════════ 4. SPELL DUEL ════════ -->
-<div class="tab-panel" id="panel-spell-duel">
-<div class="game-wrap">
-    <h2 class="game-title">⚔️ Spell Duel</h2>
-    <p class="game-desc">Type the spell shown to cast it! Wrong spells let the enemy strike back.</p>
-    <div id="sd-start">
-        <div class="duel-enemies">
-            <button class="enemy-btn" onclick="startDuel('Draco Malfoy','🧒',60)">
-                <span class="enemy-emoji">🧒</span>
-                <div class="enemy-info"><div class="enemy-name">Draco Malfoy</div><div class="enemy-hp-txt">60 HP · Easy</div></div>
-                <span class="enemy-badge">Starter</span>
-            </button>
-            <button class="enemy-btn" onclick="startDuel('Bellatrix Lestrange','🧙‍♀️',100)">
-                <span class="enemy-emoji">🧙‍♀️</span>
-                <div class="enemy-info"><div class="enemy-name">Bellatrix Lestrange</div><div class="enemy-hp-txt">100 HP · Medium</div></div>
-                <span class="enemy-badge">Hard</span>
-            </button>
-            <button class="enemy-btn boss" onclick="startDuel('Lord Voldemort','🐍',150)">
-                <span class="enemy-emoji">🐍</span>
-                <div class="enemy-info"><div class="enemy-name">Lord Voldemort</div><div class="enemy-hp-txt">150 HP · Boss</div></div>
-                <span class="enemy-badge" style="border-color:#ef5350;color:#ef9a9a">Boss</span>
-            </button>
-        </div>
-    </div>
-
-    <div id="sd-game" style="display:none">
-        <div style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;text-align:center" id="sd-badge"></div>
-        <div class="duel-arena">
-            <div class="duel-vs-row">
-                <div class="dueler">
-                    <div class="dueler-name" style="color:var(--gold)">You 🧙</div>
-                    <div class="hp-bar"><div class="hp-fill" id="sd-p-bar" style="width:100%;background:linear-gradient(to right,#4CAF50,#8BC34A)"></div></div>
-                    <div class="hp-num" id="sd-p-hp" style="color:#a5d6a7"></div>
-                </div>
-                <div class="vs-badge">VS</div>
-                <div class="dueler">
-                    <div class="dueler-name" id="sd-e-name" style="color:#ef9a9a"></div>
-                    <div class="hp-bar"><div class="hp-fill" id="sd-e-bar" style="width:100%;background:linear-gradient(to right,#ef5350,#f44336)"></div></div>
-                    <div class="hp-num" id="sd-e-hp" style="color:#ef9a9a"></div>
+    <div class="shelf">
+        <div class="book reveal reveal-delay-1" data-book="hp">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/harry_potter.jpg" alt="Harry Potter">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span>
+                    <span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('hp')">Preview</button>
                 </div>
             </div>
-            <div class="duel-prompt">
-                <div class="spell-label">Cast this spell:</div>
-                <div class="spell-word" id="sd-spell"></div>
-                <div class="spell-hint" id="sd-hint"></div>
-            </div>
-            <div class="duel-input-row">
-                <input class="duel-input" id="sd-input" placeholder="TYPE SPELL" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
-                <button class="gold-btn cast-btn" onclick="castSpell()">⚡ Cast!</button>
-            </div>
-            <div class="duel-log" id="sd-log"></div>
-        </div>
-    </div>
-
-    <div id="sd-result" style="display:none;margin-top:20px">
-        <div class="result-card">
-            <span class="r-emoji" id="sd-r-emoji"></span>
-            <div class="r-title" id="sd-r-title"></div>
-            <div class="r-sub" id="sd-r-sub"></div>
-            <div class="r-btns" style="margin-top:20px">
-                <button class="gold-btn" id="sd-rematch">Rematch!</button>
-                <button class="ghost-btn" onclick="document.getElementById('sd-game').style.display='none';document.getElementById('sd-result').style.display='none';document.getElementById('sd-start').style.display='block'">New Enemy</button>
+            <div class="book-info">
+                <div class="book-title">Harry Potter</div>
+                <div class="book-sub">J.K. Rowling · Books 1–7</div>
+                <div class="book-desc">Follow the boy who lived — from his first steps into Hogwarts to the final battle against Voldemort. The complete magical saga.</div>
             </div>
         </div>
+        <div class="book reveal reveal-delay-2" data-book="fb">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/fantastic_beasts.jpg" alt="Fantastic Beasts">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span>
+                    <span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('fb')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Fantastic Beasts</div>
+                <div class="book-sub">J.K. Rowling · Full Library Set</div>
+                <div class="book-desc">Explore the wizarding world beyond Hogwarts. Newt Scamander's adventures reveal magical creatures and hidden histories across continents.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-3" data-book="narnia">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/chronicles_of_narnia.jpg" alt="Narnia">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span>
+                    <span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('narnia')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">The Chronicles of Narnia</div>
+                <div class="book-sub">C.S. Lewis · Complete Edition</div>
+                <div class="book-desc">Step through the wardrobe into a land of talking animals, epic quests and timeless wisdom. Seven books, one unforgettable world.</div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="section-sep">· · ·</div>
+
+<!-- ══ COLLECTION II ══ -->
+<section class="section">
+    <div class="section-header">
+        <span class="section-label">Collection II</span>
+        <h2 class="section-title">Manga & Modern Tales</h2>
+        <div class="section-line"></div>
+    </div>
+    <div class="shelf">
+        <div class="book reveal reveal-delay-1" data-book="manga">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/demon_slayer_spy_x_family.jpg" alt="Manga">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('manga')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Demon Slayer · Spy × Family</div>
+                <div class="book-sub">Manga Collection</div>
+                <div class="book-desc">Tanjiro's quest to avenge his family plus Loid Forger's hilarious spy-family double-life. Two of the most beloved modern manga series.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-2" data-book="wimpy">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/diary_of_a_wimpy_kid.jpg" alt="Wimpy Kid">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('wimpy')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Diary of a Wimpy Kid</div>
+                <div class="book-sub">Jeff Kinney · Full Series</div>
+                <div class="book-desc">Greg Heffley's laugh-out-loud journal of middle school survival. Packed with doodles, disasters and relatable moments every kid will love.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-3" data-book="geronimo">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/geronimo_stilton_zac_power.jpg" alt="Geronimo">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('geronimo')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Geronimo Stilton · Zac Power</div>
+                <div class="book-sub">Adventure Series</div>
+                <div class="book-desc">Mouse reporter Geronimo stumbles into wild adventures while teen spy Zac Power tackles impossible missions. Perfect for young adventure lovers.</div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="section-sep">· · ·</div>
+
+<!-- ══ COLLECTION III ══ -->
+<section class="section">
+    <div class="section-header">
+        <span class="section-label">Collection III</span>
+        <h2 class="section-title">Heritage & Classics</h2>
+        <div class="section-line"></div>
+    </div>
+    <div class="shelf">
+        <div class="book reveal reveal-delay-1" data-book="ramayana">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/ramayana_mahabharata_gita.jpg" alt="Ramayana">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('ramayana')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Ramayana · Mahabharata · Gita</div>
+                <div class="book-sub">Sacred Epics Collection</div>
+                <div class="book-desc">India's greatest epics and the timeless wisdom of the Bhagavad Gita. Stories of dharma, courage and devotion that have guided millions for millennia.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-2" data-book="sudha">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/sudha_murty_tenali_akbar.jpg" alt="Sudha Murty">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('sudha')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Sudha Murty · Tenali Rama</div>
+                <div class="book-sub">Akbar Birbal · Indian Tales</div>
+                <div class="book-desc">Heartwarming stories, witty cleverness and legendary wordplay — Indian storytelling at its finest across three beloved collections.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-3" data-book="matilda">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/matilda_tom_sawyer.jpg" alt="Matilda">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('matilda')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Matilda · Tom Sawyer</div>
+                <div class="book-sub">Timeless Children's Classics</div>
+                <div class="book-desc">Roald Dahl's brilliant girl who uses books as her superpower, paired with Mark Twain's mischievous Mississippi adventures. Two classics every child must read.</div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="section-sep">· · ·</div>
+
+<!-- ══ COLLECTION IV ══ -->
+<section class="section">
+    <div class="section-header">
+        <span class="section-label">Collection IV</span>
+        <h2 class="section-title">The Hall of Knowledge</h2>
+        <div class="section-line"></div>
+    </div>
+    <div class="shelf" style="max-width:700px">
+        <div class="book reveal reveal-delay-1" data-book="bio">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/great_biographies.jpg" alt="Biographies">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('bio')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Great Biographies</div>
+                <div class="book-sub">Inspiring Lives & Legacies</div>
+                <div class="book-desc">True stories of the world's most extraordinary people — scientists, leaders, artists and visionaries who dared to change history.</div>
+            </div>
+        </div>
+        <div class="book reveal reveal-delay-2" data-book="sci">
+            <div class="book-poster-wrap">
+                <span class="badge">Members</span>
+                <img src="book_posters/scientific_encyclopedias.jpg" alt="Science">
+                <div class="book-lock">
+                    <span class="lock-icon">🔒</span><span class="lock-text">Members Only</span>
+                    <a href="#" class="lock-btn join-trigger">Unlock</a>
+                    <button class="preview-btn" onclick="openPreview('sci')">Preview</button>
+                </div>
+            </div>
+            <div class="book-info">
+                <div class="book-title">Scientific Encyclopedias</div>
+                <div class="book-sub">The Universe Explained</div>
+                <div class="book-desc">From atoms to galaxies — richly illustrated encyclopedias covering space, biology, physics and earth science for curious young minds.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<p class="coming-soon">More magical volumes arriving soon by Owl Post</p>
+
+<!-- ══════════════════════════════ -->
+<!--      SORTING HAT QUIZ         -->
+<!-- ══════════════════════════════ -->
+<section id="sorting-hat-section" class="reveal">
+    <div class="hat-svg">🎩</div>
+    <h2 class="sh-title">The Sorting Hat Awaits</h2>
+    <p class="sh-sub">Answer 5 questions and discover which Hogwarts house truly belongs to you…</p>
+    <div class="quiz-box">
+        <div id="quiz-area">
+            <div class="quiz-progress" id="quiz-progress"></div>
+            <div class="quiz-q" id="quiz-q-num">Question 1 of 5</div>
+            <div class="quiz-question" id="quiz-question"></div>
+            <div class="quiz-options" id="quiz-options"></div>
+        </div>
+        <div class="house-result" id="house-result">
+            <span class="house-crest" id="house-crest"></span>
+            <div class="house-name" id="house-name"></div>
+            <div class="house-motto" id="house-motto"></div>
+            <div class="house-traits" id="house-traits"></div>
+            <button class="retake-btn" onclick="startQuiz()">Take Again</button>
+        </div>
+    </div>
+</section>
+
+<div class="section-sep">· · ·</div>
+
+<!-- ══════════════════════════════ -->
+<!--      GAMES CROWD PROMO        -->
+<!-- ══════════════════════════════ -->
+<section id="games-crowd-section" class="reveal">
+    <div class="crowd-inner">
+        <span class="crowd-eyebrow">✦ Wizarding Arena · Games & Challenges</span>
+        <h2 class="crowd-title">Think You're Brave Enough<br>to <em>Enter the Arena?</em></h2>
+        <p class="crowd-sub">Test your wizarding knowledge, scramble spells, match magical symbols — and face off against dark wizards. The best witches and wizards earn a reward.</p>
+
+        <div class="snitch-reward-strip reveal">
+            <span class="snitch-strip-icon">🏅</span>
+            <div class="snitch-strip-text">
+                <strong>Win 7+ Trivia Questions → Get SNITCH10</strong>
+                Score 70% or higher in Trivia Blitz to unlock a secret 10% off voucher code
+            </div>
+        </div>
+
+        <div class="games-promo-grid">
+            <a class="game-promo-card reveal reveal-delay-1" href="games.html">
+                <span class="game-promo-icon">⚡</span>
+                <div class="game-promo-name">Trivia Blitz</div>
+                <p class="game-promo-desc">10 rapid-fire questions. Score 7+ to unlock 10% off membership.</p>
+            </a>
+            <a class="game-promo-card reveal reveal-delay-2" href="games.html">
+                <span class="game-promo-icon">🔤</span>
+                <div class="game-promo-name">Spell Scramble</div>
+                <p class="game-promo-desc">Unscramble wizarding words before the Dark Arts defeat you.</p>
+            </a>
+            <a class="game-promo-card reveal reveal-delay-3" href="games.html">
+                <span class="game-promo-icon">🃏</span>
+                <div class="game-promo-name">Memory Match</div>
+                <p class="game-promo-desc">Match magical creature pairs — test your wizard memory.</p>
+            </a>
+            <a class="game-promo-card reveal reveal-delay-1" href="games.html">
+                <span class="game-promo-icon">⚔️</span>
+                <div class="game-promo-name">Spell Duel</div>
+                <p class="game-promo-desc">Cast spells by typing them — defeat Voldemort himself.</p>
+            </a>
+        </div>
+
+        <a href="games.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:10px"><span>🎮 Enter the Arena</span></a>
+    </div>
+</section>
+
+<div class="section-sep">· · ·</div>
+
+<!-- ══════════════════════════════ -->
+<!--      VOLDEMORT DUEL CTA       -->
+<!-- ══════════════════════════════ -->
+<section id="duel-cta-section" class="reveal">
+    <div class="duel-cta-inner">
+        <div class="duel-vs-display">
+            <span class="duel-vs-you">🧙</span>
+            <span class="duel-vs-sep">VS</span>
+            <span class="duel-vs-enemy">🐍</span>
+        </div>
+        <span class="duel-cta-eyebrow">⚡ The Ultimate Challenge</span>
+        <h2 class="duel-cta-title">Dare to Duel<br><em>Lord Voldemort?</em></h2>
+        <p class="duel-cta-sub">Step into the arena and cast spells against He-Who-Must-Not-Be-Named. Only the sharpest witches and wizards prevail — and those who do, earn a reward.</p>
+
+        <div class="duel-reward-badge">
+            <span class="duel-reward-badge-icon">🏅</span>
+            <div class="duel-reward-badge-text">
+                Win → Unlock SNITCH10
+                <span>10% off your membership · Exclusive to arena champions</span>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+            <a href="games.html" class="duel-challenge-btn">⚔️ Accept the Challenge</a>
+            <a href="games.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);color:var(--text-muted);box-shadow:none"><span>🎮 All Games</span></a>
+        </div>
+
+        <div class="duel-stats-row">
+            <div class="duel-stat">
+                <span class="duel-stat-num">4</span>
+                <span class="duel-stat-lbl">Magical Games</span>
+            </div>
+            <div class="duel-stat">
+                <span class="duel-stat-num">3</span>
+                <span class="duel-stat-lbl">Dark Wizards</span>
+            </div>
+            <div class="duel-stat">
+                <span class="duel-stat-num">10%</span>
+                <span class="duel-stat-lbl">Off for Champions</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!--      MEMBERSHIP               -->
+<!-- ══════════════════════════════ -->
+<div id="membership"></div>
+<div class="perks-strip">
+    <p class="perks-strip-title">What members get</p>
+    <div class="perks-grid">
+        <div class="perk-card reveal reveal-delay-1"><span class="perk-card-icon">📚</span><div class="perk-card-title">Full Library Access</div><p class="perk-card-desc">Every book, every collection — all yours instantly</p></div>
+        <div class="perk-card reveal reveal-delay-2"><span class="perk-card-icon">🧙</span><div class="perk-card-title">Curated by Wizards</div><p class="perk-card-desc">Every book hand-picked for young readers who love adventure</p></div>
+        <div class="perk-card reveal reveal-delay-3"><span class="perk-card-icon">✨</span><div class="perk-card-title">New Arrivals First</div><p class="perk-card-desc">Members get every new book the moment it lands</p></div>
+        <div class="perk-card reveal reveal-delay-1"><span class="perk-card-icon">🌟</span><div class="perk-card-title">Growing Collection</div><p class="perk-card-desc">New magical titles added every month, exclusively for members</p></div>
     </div>
 </div>
-</div>
+<section class="membership-section">
+    <div class="membership-inner">
+        <div class="membership-left reveal">
+            <p class="membership-eyebrow">Restricted Section</p>
+            <h2 class="membership-heading">Unlock the Full<em>Wizarding Archive</em></h2>
+            <p class="membership-subhead">Over a dozen curated books across fantasy, manga, mythology and classics — all behind one membership. Your adventure begins the moment you join.</p>
+            <ul class="perks-list">
+                <li><div class="perk-icon">📖</div><div><div class="perk-label">Harry Potter Complete Series</div><div class="perk-desc">All 7 books — Philosopher's Stone to Deathly Hallows</div></div></li>
+                <li><div class="perk-icon">⚔</div><div><div class="perk-label">Manga Collection</div><div class="perk-desc">Demon Slayer, Spy × Family and more</div></div></li>
+                <li><div class="perk-icon">🕉</div><div><div class="perk-label">Sacred Indian Epics</div><div class="perk-desc">Ramayana, Mahabharata & the Bhagavad Gita</div></div></li>
+                <li><div class="perk-icon">✨</div><div><div class="perk-label">Growing Library</div><div class="perk-desc">New titles added regularly — members get access automatically</div></div></li>
+            </ul>
+            <div class="membership-cta-group">
+                <a href="#" class="btn-primary join-trigger"><span>✦ Join Now</span></a>
+                <a href="#collections" class="btn-secondary">View All Collections</a>
+            </div>
+        </div>
+        <div class="reveal reveal-delay-2">
+            <div class="membership-card">
+                <div class="card-inner">
+                    <div class="card-badge">✦ Restricted Access</div>
+                    <div class="card-price"><sup>₹</sup>99<sub>/mo</sub></div>
+                    <p class="card-period">Per Month · Members Only</p>
+                    <div class="card-divider"></div>
+                    <ul class="card-features">
+                        <li><span class="check">✦</span> Full Harry Potter series (Books 1–7)</li>
+                        <li><span class="check">✦</span> Fantastic Beasts library set</li>
+                        <li><span class="check">✦</span> Demon Slayer & Spy × Family manga</li>
+                        <li><span class="check">✦</span> Ramayana, Mahabharata & Gita</li>
+                        <li><span class="check">✦</span> All future locked titles</li>
+                        <li><span class="check">✦</span> Read on any device, any time</li>
+                    </ul>
+                    <div class="card-divider"></div>
+                    <a href="#" class="card-cta join-trigger">Unlock Everything Now</a>
+                    <p class="card-note">Instant access · Secure payment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 🔮 For those who seek, the magic word is: FRIENDS -->
+<span style="display:none;user-select:none" aria-hidden="true" id="secret-rune">✦ Voucher: FRIENDS ✦</span>
 
-</div><!-- /tabs-content -->
-
-<div class="games-footer">
-    <div class="gf-brand">E·Library by Darsh</div>
-    <p class="gf-copy">© 2026 E-Library by Darsh Mulgaonkar · Mischief Managed</p>
+<div class="final-cta reveal">
+    <div class="corner-tl"></div><div class="corner-tr"></div><div class="corner-bl"></div><div class="corner-br"></div>
+    <div class="final-cta-inner">
+        <h2 class="final-cta-heading">Your Story Awaits</h2>
+        <p class="final-cta-sub">Don't let the Restricted Section stay locked forever. Join today and step into worlds beyond imagination.</p>
+        <div class="final-cta-btns"><a href="#" class="btn-primary join-trigger"><span>✦ Become a Member</span></a></div>
+    </div>
 </div>
+</main>
+
+<footer>
+    <div class="footer-logo">E-Library by Darsh Mulgaonkar</div>
+    <div class="footer-tagline">Mischief Managed</div>
+    <p class="footer-copy">© 2026 E-Library by Darsh Mulgaonkar</p>
+</footer>
 
 <script>
-/* ══ NAV HAMBURGER ══ */
-const ham=document.getElementById('hamburger'),drw=document.getElementById('nav-drawer'),ovl=document.getElementById('nav-overlay');
-function openMenu(){ham.classList.add('open');drw.classList.add('open');ovl.classList.add('show');document.body.style.overflow='hidden';ham.setAttribute('aria-expanded','true');}
-function closeMenu(){ham.classList.remove('open');drw.classList.remove('open');ovl.classList.remove('show');document.body.style.overflow='';ham.setAttribute('aria-expanded','false');}
-ham.addEventListener('click',()=>drw.classList.contains('open')?closeMenu():openMenu());
-ovl.addEventListener('click',closeMenu);
-document.querySelectorAll('.nav-drawer-link').forEach(l=>l.addEventListener('click',closeMenu));
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60),{passive:true});
+const MEMBERSHIP_URL = 'https://tinyurl.com/ElibraryDarshMembership';
 
-/* ══ TABS ══ */
-const TABS=['trivia-blitz','spell-scramble','memory-match','spell-duel'];
-function switchTab(id){
-    TABS.forEach(t=>{
-        document.getElementById('tab-'+t).classList.toggle('active',t===id);
-        document.getElementById('panel-'+t).classList.toggle('active',t===id);
-    });
-    window.scrollTo({top:0,behavior:'smooth'});
+/* ══ CUSTOM CURSOR ══ */
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursor-dot');
+let mx=0, my=0, cx=0, cy=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; });
+(function animCursor(){ cx+=(mx-cx)*0.12; cy+=(my-cy)*0.12; cursor.style.left=cx+'px'; cursor.style.top=cy+'px'; requestAnimationFrame(animCursor); })();
+document.addEventListener('mousedown',()=>cursor.classList.add('clicking'));
+document.addEventListener('mouseup',()=>cursor.classList.remove('clicking'));
+
+/* ══ SPELL SPARKS ON CLICK ══ */
+const sparkColors = ['#FFD700','#FFF8DC','#C9A84C','#fff','#ffa500','#ff69b4','#00bfff'];
+document.addEventListener('click', e => {
+    for(let i=0;i<14;i++){
+        const s=document.createElement('div');
+        s.className='spark';
+        const angle=Math.random()*360, dist=30+Math.random()*50;
+        const tx=Math.cos(angle*Math.PI/180)*dist, ty=Math.sin(angle*Math.PI/180)*dist;
+        const size=2+Math.random()*4;
+        s.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;width:${size}px;height:${size}px;background:${sparkColors[Math.floor(Math.random()*sparkColors.length)]};--tx:${tx}px;--ty:${ty}px;animation-duration:${0.4+Math.random()*0.4}s`;
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(),800);
+    }
+});
+
+/* ══ NAV SCROLL ══ */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>80));
+
+/* ══ PARTICLES ══ */
+const pc=document.getElementById('particles');
+for(let i=0;i<28;i++){
+    const p=document.createElement('div'); p.className='particle';
+    p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;animation-duration:${8+Math.random()*16}s;animation-delay:${Math.random()*20}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px`;
+    pc.appendChild(p);
 }
 
-/* ══════════════════════════════════
-        1. TRIVIA BLITZ
-══════════════════════════════════ */
-const QB={
-easy:[
-    {cat:"Spells",q:"What spell makes objects fly?",opts:["Lumos","Wingardium Leviosa","Expelliarmus","Stupefy"],a:1},
-    {cat:"Characters",q:"What is the name of Harry's owl?",opts:["Fawkes","Crookshanks","Hedwig","Scabbers"],a:2},
-    {cat:"Hogwarts",q:"Which house does Harry Potter belong to?",opts:["Slytherin","Ravenclaw","Hufflepuff","Gryffindor"],a:3},
-    {cat:"Spells",q:"What spell produces light from a wand?",opts:["Nox","Lumos","Alohomora","Accio"],a:1},
-    {cat:"Characters",q:"Who is Harry Potter's best friend?",opts:["Neville","Draco","Ron","Dean"],a:2},
-    {cat:"Creatures",q:"What creature is Hedwig?",opts:["Cat","Toad","Owl","Rat"],a:2},
-    {cat:"Spells",q:"What spell unlocks doors?",opts:["Colloportus","Alohomora","Nox","Accio"],a:1},
-    {cat:"Characters",q:"What is the name of Hermione's cat?",opts:["Crookshanks","Pigwidgeon","Trevor","Scabbers"],a:0},
-    {cat:"Objects",q:"What is Harry's broomstick in his first year?",opts:["Nimbus 2001","Firebolt","Cleansweep","Nimbus 2000"],a:3},
-    {cat:"Hogwarts",q:"What is the name of the school of witchcraft?",opts:["Durmstrang","Beauxbatons","Castelobruxo","Hogwarts"],a:3},
-],
-medium:[
-    {cat:"Potions",q:"Which potion grants extraordinary luck?",opts:["Veritaserum","Polyjuice Potion","Felix Felicis","Amortentia"],a:2},
-    {cat:"Spells",q:"What is the incantation for the Patronus charm?",opts:["Lumos Patronum","Expecto Patronum","Riddikulus","Protego"],a:1},
-    {cat:"Characters",q:"Who is the Half-Blood Prince?",opts:["Tom Riddle","Draco Malfoy","Severus Snape","Sirius Black"],a:2},
-    {cat:"Hogwarts",q:"What does Hermione's Patronus look like?",opts:["Doe","Cat","Otter","Hare"],a:2},
-    {cat:"Objects",q:"In which Gringotts vault was the Philosopher's Stone kept?",opts:["Vault 999","Vault 687","Vault 317","Vault 713"],a:3},
-    {cat:"Spells",q:"What does 'Riddikulus' do?",opts:["Creates fire","Banishes a boggart","Summons objects","Heals wounds"],a:1},
-    {cat:"Characters",q:"What is Voldemort's real name?",opts:["Tom Marvolo Riddle","Tom Riddle Jr","Ralph Riddle","Thomas Gaunt"],a:0},
-    {cat:"Objects",q:"What is the core of Harry's wand?",opts:["Dragon heartstring","Unicorn hair","Phoenix feather","Veela hair"],a:2},
-    {cat:"Creatures",q:"What creature is a Blast-Ended Skrewt?",opts:["Pure-blood","Muggle invention","Magical hybrid","Giant spider"],a:2},
-    {cat:"Spells",q:"What spell disarms an opponent?",opts:["Stupefy","Crucio","Expelliarmus","Accio"],a:2},
-],
-hard:[
-    {cat:"Lore",q:"What are the three Deathly Hallows?",opts:["Wand, ring, cloak","Stone, wand, mirror","Wand, stone, cloak","Sword, stone, wand"],a:2},
-    {cat:"Characters",q:"Who was Headmaster before Dumbledore?",opts:["Armando Dippet","Everard","Phineas Black","Dilys Derwent"],a:0},
-    {cat:"Creatures",q:"What does a Basilisk's indirect gaze do?",opts:["Kills instantly","Blinds permanently","Petrifies","Causes amnesia"],a:2},
-    {cat:"Potions",q:"What is the base ingredient of Polyjuice Potion?",opts:["Boomslang skin","Bicorn horn","Fluxweed","Lacewing flies"],a:3},
-    {cat:"Characters",q:"Which ghost haunts the girls' bathroom?",opts:["The Bloody Baron","Moaning Myrtle","Nearly Headless Nick","The Grey Lady"],a:1},
-    {cat:"Objects",q:"What does the Mirror of Erised show?",opts:["The future","The past","One's deepest desire","One's greatest fear"],a:2},
-    {cat:"Spells",q:"What spell does Harry use to defeat Voldemort finally?",opts:["Avada Kedavra","Stupefy","Expelliarmus","Crucio"],a:2},
-    {cat:"Lore",q:"What magical village is near Hogwarts?",opts:["Diagon Alley","Knockturn Alley","Hogsmeade","Godric's Hollow"],a:2},
-    {cat:"Spells",q:"What does 'Morsmordre' conjure in the sky?",opts:["The Dark Mark","A Patronus","Fiendfyre","Serpensortia"],a:0},
-    {cat:"Lore",q:"What language can Harry speak due to Voldemort's Horcrux?",opts:["Mermish","Gobbledegook","Parseltongue","Troll"],a:2},
-]};
-let tbScore=0,tbStreak=0,tbQIdx=0,tbDiff='medium',tbTimer=null,tbAnswered=false,tbDots=[];
-const TB_TIME={easy:20,medium:15,hard:10};
-function showTBStart(){document.getElementById('tb-start').style.display='block';document.getElementById('tb-game').style.display='none';document.getElementById('tb-result').style.display='none';const b=localStorage.getItem('tb_best_'+tbDiff);document.getElementById('tb-best').textContent=b?'Best ('+tbDiff+'): '+b+' pts':'';}
-function startTrivia(diff){
-    tbDiff=diff;tbScore=0;tbStreak=0;tbQIdx=0;tbAnswered=false;tbDots=Array(10).fill('');
-    document.getElementById('tb-start').style.display='none';
-    document.getElementById('tb-game').style.display='block';
-    document.getElementById('tb-result').style.display='none';
-    loadTBQ();
-}
-function renderProg(){document.getElementById('tb-progress').innerHTML=tbDots.map((d,i)=>`<div class="tq-dot ${i<tbQIdx?d:i===tbQIdx?'cur':''}"></div>`).join('');}
-function loadTBQ(){
-    if(tbQIdx>=10){endTrivia();return;}
-    tbAnswered=false;
-    const q=QB[tbDiff][tbQIdx];
-    document.getElementById('tb-score').textContent=tbScore;
-    document.getElementById('tb-streak').textContent=tbStreak;
-    document.getElementById('tb-qnum').textContent=(tbQIdx+1)+'/10';
-    document.getElementById('tb-cat').textContent=q.cat;
-    document.getElementById('tb-q').textContent=q.q;
-    document.getElementById('tb-fb').className='tq-fb';
-    const sh=[...q.opts.map((t,i)=>({t,i}))].sort(()=>Math.random()-.5);
-    document.getElementById('tb-opts').innerHTML=sh.map(o=>`<button class="tq-opt" data-orig="${o.i}" onclick="tbAnswer(${o.i})">${o.t}</button>`).join('');
-    renderProg();
-    clearInterval(tbTimer);
-    const tot=TB_TIME[tbDiff];let el=0;
-    document.getElementById('tb-timer-fill').style.width='100%';
-    tbTimer=setInterval(()=>{
-        el+=0.1;const pct=Math.max(0,100-(el/tot*100));
-        const f=document.getElementById('tb-timer-fill');
-        if(f){f.style.width=pct+'%';f.style.background=pct>50?'linear-gradient(to right,var(--gold),#ff8c00)':pct>25?'linear-gradient(to right,#ff8c00,#ff4500)':'linear-gradient(to right,#ff4500,#cc0000)';}
-        if(el>=tot&&!tbAnswered){tbAnswered=true;clearInterval(tbTimer);document.querySelectorAll('.tq-opt').forEach(b=>{b.classList.add('disabled');if(parseInt(b.dataset.orig)===q.a)b.classList.add('correct');});const fb=document.getElementById('tb-fb');fb.className='tq-fb time show';fb.textContent="⏰ Time's up! Answer: "+q.opts[q.a];tbStreak=0;tbDots[tbQIdx]='wrong';setTimeout(()=>{tbQIdx++;loadTBQ();},1800);}
-    },100);
-}
-function tbAnswer(origIdx){
-    if(tbAnswered)return;tbAnswered=true;clearInterval(tbTimer);
-    const q=QB[tbDiff][tbQIdx];
-    document.querySelectorAll('.tq-opt').forEach(b=>{b.classList.add('disabled');const i=parseInt(b.dataset.orig);if(i===q.a)b.classList.add('correct');else if(i===origIdx)b.classList.add('wrong');});
-    const ok=origIdx===q.a;
-    const fb=document.getElementById('tb-fb');
-    if(ok){tbStreak++;const m=tbDiff==='easy'?1:tbDiff==='medium'?1.5:2;const pts=Math.round(10*m*(1+Math.floor(tbStreak/3)*.5));tbScore+=pts;fb.className='tq-fb right show';fb.textContent=`⚡ Correct! +${pts} pts${tbStreak>1?' ('+tbStreak+'× streak)':''}`;tbDots[tbQIdx]='right';}
-    else{tbStreak=0;fb.className='tq-fb wrong show';fb.textContent='✗ Answer: '+q.opts[q.a];tbDots[tbQIdx]='wrong';}
-    document.getElementById('tb-score').textContent=tbScore;
-    document.getElementById('tb-streak').textContent=tbStreak;
-    renderProg();
-    setTimeout(()=>{tbQIdx++;loadTBQ();},1600);
-}
-function endTrivia(){
-    clearInterval(tbTimer);
-    document.getElementById('tb-game').style.display='none';
-    document.getElementById('tb-result').style.display='block';
-    let emoji,title,sub;
-    if(tbScore>=90){emoji='🏆';title='Unbeatable!';sub="Dumbledore himself would be impressed!";}
-    else if(tbScore>=60){emoji='⚡';title='Outstanding!';sub="You could pass your O.W.L.s with ease!";}
-    else if(tbScore>=30){emoji='🎩';title='Acceptable';sub="Keep reading and you'll do better next time!";}
-    else{emoji='📚';title='Troll...';sub="Back to the library for you!";}
-    document.getElementById('tb-r-emoji').textContent=emoji;
-    document.getElementById('tb-r-title').textContent=title;
-    document.getElementById('tb-r-sub').textContent=sub;
-    document.getElementById('tb-r-score').textContent=tbScore;
-    const prev=parseInt(localStorage.getItem('tb_best_'+tbDiff)||'0');
-    if(tbScore>prev)localStorage.setItem('tb_best_'+tbDiff,tbScore);
-}
-showTBStart();
+/* ══ SCROLL REVEAL ══ */
+const revObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
 
-/* ══════════════════════════════════
-        2. SPELL SCRAMBLE
-══════════════════════════════════ */
-const SW=[
-    {w:"LUMOS",h:"Lighting charm",c:"Spell"},{w:"PATRONUS",h:"Spirit animal protector",c:"Magic"},
-    {w:"HOGWARTS",h:"School of witchcraft and wizardry",c:"Place"},{w:"HERMIONE",h:"The cleverest witch of her age",c:"Character"},
-    {w:"QUIDDITCH",h:"Wizarding sport on broomsticks",c:"Sport"},{w:"DUMBLEDORE",h:"Greatest wizard of the age",c:"Character"},
-    {w:"EXPELLIARMUS",h:"Disarming spell",c:"Spell"},{w:"HORCRUX",h:"Object containing a piece of soul",c:"Dark Magic"},
-    {w:"BASILISK",h:"Deadly serpent in Chamber of Secrets",c:"Creature"},{w:"VOLDEMORT",h:"He-Who-Must-Not-Be-Named",c:"Character"},
-    {w:"GRYFFINDOR",h:"House of the brave at heart",c:"House"},{w:"SLYTHERIN",h:"House of the cunning",c:"House"},
-    {w:"RAVENCLAW",h:"House of the wise",c:"House"},{w:"HUFFLEPUFF",h:"House of the loyal",c:"House"},
-    {w:"NIFFLER",h:"Creature that loves shiny things",c:"Creature"},{w:"PHOENIX",h:"Fawkes is one of these",c:"Creature"},
-    {w:"BUTTERBEER",h:"Favourite drink at Three Broomsticks",c:"Food"},{w:"AZKABAN",h:"The wizarding prison",c:"Place"},
-    {w:"DIAGON",h:"___ Alley — wizarding shopping street",c:"Place"},{w:"ACCIO",h:"Summoning charm",c:"Spell"},
+/* ══ HOGWARTS LETTER + JOIN ══ */
+function triggerLetterAndJoin(e){
+    if(e) e.preventDefault();
+    const overlay=document.getElementById('letter-overlay');
+    overlay.classList.add('fly');
+    setTimeout(()=>{ overlay.classList.remove('fly'); window.open(MEMBERSHIP_URL,'_blank'); },1900);
+}
+document.getElementById('hero-join-btn').addEventListener('click',triggerLetterAndJoin);
+document.querySelectorAll('.join-trigger').forEach(el=>el.addEventListener('click',triggerLetterAndJoin));
+document.getElementById('join-btn').addEventListener('click',triggerLetterAndJoin);
+
+/* ══ BOOK PREVIEW DATA ══ */
+const previewData = {
+    hp: { title:'Harry Potter and the Philosopher\'s Stone', author:'J.K. Rowling', text:`<p>Mr and Mrs Dursley, of number four, Privet Drive, were proud to say that they were perfectly normal, thank you very much. They were the last people you'd expect to be involved in anything strange or mysterious, because they just didn't hold with such nonsense.</p><p>Mr Dursley was the director of a firm called Grunnings, which made drills. He was a big, beefy man with hardly any neck, although he did have a very large moustache. Mrs Dursley was thin and blonde and had nearly twice the usual amount of neck, which came in very useful as she spent so much of her time craning over garden fences, spying on the neighbours.</p><p>The Dursleys had a small son called Dudley and in their opinion there was no finer boy anywhere...</p>` },
+    fb: { title:'Fantastic Beasts and Where to Find Them', author:'J.K. Rowling', text:`<p>Newt Scamander has become a bestselling author in both the Muggle and wizarding worlds. His magnum opus, Fantastic Beasts and Where to Find Them, has been an approved textbook at Hogwarts School of Witchcraft and Wizardry since its first publication and can be found in most wizarding households.</p><p>But who is the man behind the beasts? Newt Scamander — magizoologist, adventurer, and holder of the Order of Merlin (Second Class) — has spent decades cataloguing the world's magical creatures...</p>` },
+    narnia: { title:'The Lion, the Witch and the Wardrobe', author:'C.S. Lewis', text:`<p>Once there were four children whose names were Peter, Susan, Edmund and Lucy. This story is about something that happened to them when they were sent away from London during the war because of the air-raids.</p><p>They were sent to the house of an old Professor who lived in the heart of the country, ten miles from the nearest railway station and two miles from the nearest post office. He had no wife and he lived in a very large house with a housekeeper called Mrs Macready and three servants...</p><p>Lucy looked into a large, dark place. It was quite empty except for one big wardrobe; the sort that has a looking-glass in the door. There was nothing else in the room at all except a dead bluebottle on the windowsill...</p>` },
+    manga: { title:'Demon Slayer: Kimetsu no Yaiba', author:'Koyoharu Gotouge', text:`<p>It is the Taisho Period in Japan. Tanjiro Kamado, a kind-hearted boy who sells charcoal for a living, finds his family slaughtered by a demon. To make matters worse, his younger sister Nezuko, the sole survivor, has been transformed into a demon herself.</p><p>Though devastated, Tanjiro resolves to become a "demon slayer" so that he can turn his sister back into a human, and kill the demon that massacred his family. A fascinating tale of brotherhood unfolds...</p>` },
+    wimpy: { title:'Diary of a Wimpy Kid', author:'Jeff Kinney', text:`<p>Let me just say for the record that I think middle school is the dumbest idea ever invented. You got kids like me who haven't hit their growth spurt yet mixed in with these gorillas who need to shave twice a day.</p><p>And then they wonder why bullying is such a big problem. I'll tell you why — it's because the teachers can't tell the difference between a seventh grader and a full-grown adult without their glasses on. If it were up to me, I'd just skip middle school altogether and go straight from elementary to high school...</p>` },
+    geronimo: { title:'Geronimo Stilton: Lost Treasure of the Emerald Eye', author:'Geronimo Stilton', text:`<p>My name is Stilton, Geronimo Stilton. I am the publisher of The Rodent's Gazette, the most popular newspaper on Mouse Island. Every morning I wake up to the smell of freshly printed paper and the sound of squeaking typewriters.</p><p>That particular morning started like any other — until my sister Thea burst into my office with a mysterious map she had found at a flea market. She was absolutely convinced it led to a hidden treasure. I, on the other hand, was absolutely certain it would lead to trouble...</p>` },
+    ramayana: { title:'The Ramayana', author:'Valmiki', text:`<p>Long ago, in the kingdom of Ayodhya, there lived a king named Dasharatha who had three queens and four sons. The eldest, Rama, was the embodiment of virtue and dharma — beloved by all who knew him, gentle in speech, mighty in battle, and devoted to truth above all else.</p><p>The sage Vishwamitra came to Dasharatha one day, seeking Rama's help in protecting his sacred fire-sacrifice from the demons Maricha and Subahu. Though Dasharatha was reluctant to part with his beloved son, Rama stepped forward willingly, knowing that to serve a sage was the highest duty...</p>` },
+    sudha: { title:'Grandma\'s Bag of Stories', author:'Sudha Murty', text:`<p>Every summer, seven-year-old Raghu and his cousins would make the long journey to their grandmother's house in the village. Ammamma — as they called her — was a small woman with silver hair and the warmest smile in the world.</p><p>She smelled of jasmine and sandalwood, and she had a bottomless bag of stories. Every evening, as the sun dipped behind the mango trees and fireflies began to blink in the garden, the children would gather around her on the cool stone steps, and she would begin...</p>` },
+    matilda: { title:'Matilda', author:'Roald Dahl', text:`<p>It's a funny thing about mothers and fathers. Even if their own child is the most disgusting little blister you could ever imagine, they still think that he or she is wonderful.</p><p>Mr and Mrs Wormwood had two children. The son Michael was a perfectly normal boy. But the daughter, Matilda, was something special. By the age of three she had taught herself to read by studying newspapers and magazines that lay around the house. By four she had read every children's book in the local library and was asking the librarian, Mrs Phelps, for something more challenging...</p>` },
+    bio: { title:'Great Biographies', author:'Various Authors', text:`<p>What makes an extraordinary life? Is it the audacity to dream impossibly large? The stubbornness to rise after every fall? Or simply the courage to stay true to one's convictions when the whole world disagrees?</p><p>In these pages, we meet ten remarkable individuals who each answered that question differently — yet all left an indelible mark on the world. From Marie Curie's glowing laboratory in Paris to A.P.J. Abdul Kalam's childhood in Rameswaram, these are the lives that dare us to dream bigger...</p>` },
+    sci: { title:'Scientific Encyclopedias', author:'DK Publishing', text:`<p>You are made of stars. The iron in your blood was forged in the heart of a dying sun billions of years ago. The calcium in your bones, the oxygen in each breath — all of it created in stellar furnaces long before our solar system existed.</p><p>Science is the greatest story ever told, and it is still being written. From the impossibly small — quarks and electrons dancing inside every atom — to the impossibly large — superclusters of galaxies stretching across the observable universe — the cosmos is more strange and wonderful than any fantasy...</p>` }
+};
+
+function openPreview(bookId){
+    const data=previewData[bookId];
+    if(!data) return;
+    document.getElementById('modal-book-title').textContent=data.title;
+    document.getElementById('modal-book-author').textContent=data.author;
+    document.getElementById('modal-book-text').innerHTML=data.text;
+    document.getElementById('preview-modal').classList.add('open');
+    document.body.style.overflow='hidden';
+}
+document.getElementById('modal-close-btn').onclick=()=>{
+    document.getElementById('preview-modal').classList.remove('open');
+    document.body.style.overflow='';
+};
+document.getElementById('preview-modal').addEventListener('click',e=>{
+    if(e.target===document.getElementById('preview-modal')){ document.getElementById('preview-modal').classList.remove('open'); document.body.style.overflow=''; }
+});
+
+/* ══ SORTING HAT QUIZ ══ */
+const quizData = [
+    { q:"A fellow student is being bullied. What do you do?", opts:[{t:"Stand up immediately — even if it means getting in trouble",h:"gryffindor"},{t:"Find a clever way to distract the bully without confrontation",h:"ravenclaw"},{t:"Quietly comfort the victim and tell a trusted adult",h:"hufflepuff"},{t:"Use the situation strategically to gain the bully's respect",h:"slytherin"}] },
+    { q:"Your greatest desire is…", opts:[{t:"To be remembered as a hero who changed the world",h:"gryffindor"},{t:"To unlock the deepest secrets of magic and knowledge",h:"ravenclaw"},{t:"To have a loyal circle of friends and a peaceful life",h:"hufflepuff"},{t:"To achieve greatness and leave a powerful legacy",h:"slytherin"}] },
+    { q:"You find a bag of gold on the street. You…", opts:[{t:"Turn it in — what if someone desperately needs it?",h:"hufflepuff"},{t:"Try to use logic to find the rightful owner",h:"ravenclaw"},{t:"Keep it! Fortune favours the bold.",h:"gryffindor"},{t:"Hold onto it until you can use it for something important",h:"slytherin"}] },
+    { q:"In class, you're most likely to be…", opts:[{t:"The one who volunteers to answer every question",h:"gryffindor"},{t:"The one who asks questions the teacher can't answer",h:"ravenclaw"},{t:"The one helping classmates who are confused",h:"hufflepuff"},{t:"The one who has already read three chapters ahead",h:"slytherin"}] },
+    { q:"Your ideal Saturday at Hogwarts would be…", opts:[{t:"Playing Quidditch or going on an adventure",h:"gryffindor"},{t:"Spending the day in the library with a fascinating book",h:"ravenclaw"},{t:"Exploring Hogsmeade with your best friends",h:"hufflepuff"},{t:"Practising advanced magic spells alone in the dungeons",h:"slytherin"}] },
 ];
-let ssScore=0,ssSolved=0,ssLives=3,ssIdx=0,ssOrder=[];
-function scramble(w){let a=[...w];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.join('')===w?scramble(w):a.join('');}
-function resetScramble(){ssScore=0;ssSolved=0;ssLives=3;ssIdx=0;ssOrder=[...SW].sort(()=>Math.random()-.5);document.getElementById('ss-game').style.display='block';document.getElementById('ss-over').style.display='none';loadSW();}
-function loadSW(){
-    if(ssIdx>=ssOrder.length){ssIdx=0;ssOrder.sort(()=>Math.random()-.5);}
-    const w=ssOrder[ssIdx];
-    document.getElementById('ss-cat').textContent=w.c;
-    document.getElementById('ss-word').textContent=scramble(w.w);
-    document.getElementById('ss-hint').textContent='Hint: '+w.h;
-    document.getElementById('ss-input').value='';
-    document.getElementById('ss-fb').textContent='';
-    document.getElementById('ss-fb').className='scr-fb';
-    document.getElementById('ss-score').textContent=ssScore;
-    document.getElementById('ss-solved').textContent=ssSolved;
-    document.getElementById('ss-lives').textContent='❤️'.repeat(Math.max(0,ssLives))+'🖤'.repeat(Math.max(0,3-ssLives));
+const houseData = {
+    gryffindor:{ name:"Gryffindor", crest:"🦁", motto:'"Where dwell the brave at heart"', traits:["Brave","Bold","Chivalrous","Daring"], colour:"#D3A625", bg:"#740001" },
+    slytherin:{ name:"Slytherin", crest:"🐍", motto:'"Those cunning folk use any means to achieve their ends"', traits:["Ambitious","Cunning","Resourceful","Leader"], colour:"#AAAAAA", bg:"#1A472A" },
+    ravenclaw:{ name:"Ravenclaw", crest:"🦅", motto:'"Wit beyond measure is man\'s greatest treasure"', traits:["Wise","Creative","Witty","Curious"], colour:"#946B2D", bg:"#0E1A40" },
+    hufflepuff:{ name:"Hufflepuff", crest:"🦡", motto:'"Those patient Hufflepuffs are true and unafraid of toil"', traits:["Kind","Patient","Loyal","Fair"], colour:"#ECB939", bg:"#372E29" },
+};
+let quizScores={gryffindor:0,slytherin:0,ravenclaw:0,hufflepuff:0}, quizIdx=0;
+function startQuiz(){
+    quizScores={gryffindor:0,slytherin:0,ravenclaw:0,hufflepuff:0}; quizIdx=0;
+    document.getElementById('house-result').classList.remove('show');
+    document.getElementById('quiz-area').style.display='';
+    showQuizQuestion();
 }
-function checkScramble(){
-    const v=document.getElementById('ss-input').value.trim().toUpperCase().replace(/\s+/g,'');
-    if(!v)return;
-    const correct=ssOrder[ssIdx].w;
-    const fb=document.getElementById('ss-fb');
-    if(v===correct){
-        fb.textContent='✨ Correct! "'+correct+'"';fb.className='scr-fb ok';
-        ssScore+=10;ssSolved++;
-        setTimeout(()=>{ssIdx++;loadSW();},1000);
-    }else{
-        fb.textContent='✗ Not quite, try again!';fb.className='scr-fb no';
-        ssLives--;
-        document.getElementById('ss-lives').textContent='❤️'.repeat(Math.max(0,ssLives))+'🖤'.repeat(Math.max(0,3-ssLives));
-        if(ssLives<=0){document.getElementById('ss-game').style.display='none';document.getElementById('ss-over').style.display='block';document.getElementById('ss-final').textContent=ssSolved;}
-    }
+function showQuizQuestion(){
+    const q=quizData[quizIdx];
+    // shuffle options
+    const opts=[...q.opts].sort(()=>Math.random()-.5);
+    const prog=document.getElementById('quiz-progress');
+    prog.innerHTML=quizData.map((_,i)=>`<div class="quiz-dot${i<quizIdx?' done':''}"></div>`).join('');
+    document.getElementById('quiz-q-num').textContent=`Question ${quizIdx+1} of ${quizData.length}`;
+    document.getElementById('quiz-question').textContent=q.q;
+    const optEl=document.getElementById('quiz-options');
+    optEl.innerHTML=opts.map((o,i)=>`<button class="quiz-opt" onclick="quizAnswer('${o.h}')">${o.t}</button>`).join('');
 }
-function skipScramble(){if(ssLives>1)ssLives--;ssIdx++;loadSW();}
-document.getElementById('ss-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkScramble();});
-resetScramble();
+function quizAnswer(house){
+    quizScores[house]++;
+    quizIdx++;
+    if(quizIdx>=quizData.length){ showHouseResult(); }
+    else { showQuizQuestion(); }
+}
+function showHouseResult(){
+    const winner=Object.entries(quizScores).sort((a,b)=>b[1]-a[1])[0][0];
+    const h=houseData[winner];
+    document.getElementById('quiz-area').style.display='none';
+    const res=document.getElementById('house-result');
+    document.getElementById('house-crest').textContent=h.crest;
+    document.getElementById('house-name').textContent=h.name;
+    document.getElementById('house-name').style.color=h.colour;
+    document.getElementById('house-motto').textContent=h.motto;
+    document.getElementById('house-traits').innerHTML=h.traits.map(t=>`<span class="house-trait" style="color:${h.colour};border-color:${h.colour}">${t}</span>`).join('');
+    res.classList.add('show');
+}
+startQuiz();
 
-/* ══════════════════════════════════
-        3. MEMORY MATCH
-══════════════════════════════════ */
-const EMJS=['🧙','🐍','🦁','🦅','🦡','🔮','⚡','🧪','🪄','🐉','🦉','🏆'];
-let mmFlipped=[],mmMatched=0,mmMoves=0,mmCards=[],mmLocked=false,mmTI=null,mmSec=0;
-function resetMemory(){
-    clearInterval(mmTI);mmSec=0;mmMoves=0;mmMatched=0;mmFlipped=[];mmLocked=false;
-    document.getElementById('mm-win').style.display='none';
-    ['mm-moves','mm-pairs','mm-time'].forEach((id,i)=>document.getElementById(id).textContent=['0','0/8','0:00'][i]);
-    const ch=[...EMJS].sort(()=>Math.random()-.5).slice(0,8);
-    mmCards=[...ch,...ch].sort(()=>Math.random()-.5);
-    document.getElementById('mm-grid').innerHTML=mmCards.map((e,i)=>`<div class="mc" id="mc${i}" onclick="flipCard(${i})"><div class="mc-inner"><div class="mc-back">✦</div><div class="mc-front">${e}</div></div></div>`).join('');
-    mmTI=setInterval(()=>{mmSec++;const m=Math.floor(mmSec/60),s=mmSec%60;document.getElementById('mm-time').textContent=m+':'+(s<10?'0':'')+s;},1000);
-}
-function flipCard(idx){
-    if(mmLocked||mmFlipped.includes(idx))return;
-    const c=document.getElementById('mc'+idx);
-    if(c.classList.contains('matched')||c.classList.contains('flipped'))return;
-    c.classList.add('flipped');mmFlipped.push(idx);
-    if(mmFlipped.length===2){
-        mmMoves++;document.getElementById('mm-moves').textContent=mmMoves;mmLocked=true;
-        const[a,b]=mmFlipped;
-        if(mmCards[a]===mmCards[b]){
-            setTimeout(()=>{[a,b].forEach(i=>document.getElementById('mc'+i).classList.add('matched'));mmMatched++;document.getElementById('mm-pairs').textContent=mmMatched+'/8';mmFlipped=[];mmLocked=false;if(mmMatched===8){clearInterval(mmTI);setTimeout(showMMWin,500);}},400);
-        }else{
-            setTimeout(()=>{
-                [a,b].forEach(i=>{const el=document.getElementById('mc'+i);el.classList.add('flash');});
-                setTimeout(()=>{[a,b].forEach(i=>{const el=document.getElementById('mc'+i);el.classList.remove('flipped','flash');});mmFlipped=[];mmLocked=false;},250);
-            },700);
-        }
+/* ══ EASTER EGG — SECRET VOUCHER ══ */
+// Hidden in the source. Those curious enough to look will find it.
+// The magic word whispered by the founders: FRIENDS
+let _eq='',_et=null;
+document.addEventListener('keydown',e=>{
+    _eq=((_eq+e.key).slice(-7));
+    clearTimeout(_et);_et=setTimeout(()=>_eq='',1500);
+    if(_eq.toUpperCase()==='FRIENDS'){
+        const t=document.createElement('div');
+        t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#1a0f10,#0f0a14);border:1px solid var(--gold);color:var(--parchment);font-family:Cinzel,serif;font-size:.65rem;letter-spacing:3px;padding:20px 40px;text-align:center;z-index:99500;text-transform:uppercase;transition:transform .5s cubic-bezier(.34,1.56,.64,1)';
+        t.innerHTML='<div style="color:var(--gold);font-family:Cinzel Decorative,serif;font-size:.9rem;margin-bottom:8px">🔮 Secret Discovered!</div>Your voucher code: <strong style="color:var(--gold)">FRIENDS</strong>';
+        document.body.appendChild(t);
+        setTimeout(()=>t.style.transform='translateX(-50%) translateY(0)',50);
+        setTimeout(()=>{t.style.transform='translateX(-50%) translateY(100px)';setTimeout(()=>t.remove(),600);},5000);
+        _eq='';
     }
-}
-function showMMWin(){
-    document.getElementById('mm-win').style.display='block';
-    const m=Math.floor(mmSec/60),s=mmSec%60;
-    document.getElementById('mm-win-sub').textContent=`Completed in ${m}:${s<10?'0':''}${s} with ${mmMoves} moves! ${mmMoves<=16?'🌟 Perfect!':mmMoves<=24?'Well done!':'Keep practising!'}`;
-}
-resetMemory();
+});
 
-/* ══════════════════════════════════
-        4. SPELL DUEL
-══════════════════════════════════ */
-const DS=[
-    {s:"EXPELLIARMUS",d:20,desc:"disarmed them!",hint:"✦ The disarming charm — Harry's signature spell"},
-    {s:"STUPEFY",d:15,desc:"stunned the enemy!",hint:"✦ Stuns the target — knocks them unconscious"},
-    {s:"PROTEGO",d:0,heal:15,desc:"shielded yourself!",hint:"✦ Shield charm — blocks jinxes & heals you"},
-    {s:"INCENDIO",d:25,desc:"set them ablaze!",hint:"✦ Fire-conjuring spell — causes serious burns"},
-    {s:"WINGARDIUM LEVIOSA",d:10,desc:"lifted them up!",hint:"✦ Levitation charm — swish and flick!"},
-    {s:"RIDDIKULUS",d:18,desc:"made a fool of them!",hint:"✦ Boggart banishing spell — think of something funny"},
-    {s:"EXPECTO PATRONUM",d:30,desc:"summoned your Patronus!",hint:"✦ Summons a spirit guardian — most powerful spell"},
-    {s:"ALOHOMORA",d:12,desc:"opened their defences!",hint:"✦ Unlocking charm — opens locked doors & defences"},
-    {s:"ACCIO",d:8,heal:10,desc:"summoned your strength!",hint:"✦ Summoning charm — draws objects to the caster"},
-    {s:"LUMOS MAXIMA",d:22,desc:"blinded the enemy!",hint:"✦ Maximum light spell — blinds with intense brightness"},
-];
-const EA=["Avada Kedavra deflected!","Crucio flies past your ear!","A dark curse grazes you!","Dark magic swirls!","Sectumsempra lashes out!"];
-let sdPHP=100,sdEHP=100,sdEMax=100,sdSQ=[],sdCur=null,sdEName='';
-function startDuel(name,emoji,hp){
-    sdPHP=100;sdEHP=hp;sdEMax=hp;sdEName=name;
-    document.getElementById('sd-start').style.display='none';
-    document.getElementById('sd-game').style.display='block';
-    document.getElementById('sd-result').style.display='none';
-    document.getElementById('sd-badge').textContent='⚔️ Duelling: '+emoji+' '+name;
-    document.getElementById('sd-e-name').textContent=emoji+' '+name;
-    document.getElementById('sd-log').innerHTML='<div class="dl">The duel begins! Defeat '+name+'!</div>';
-    document.getElementById('sd-rematch').onclick=()=>startDuel(name,emoji,hp);
-    updateBars();nextDS();
-}
-function nextDS(){sdSQ=[...DS].sort(()=>Math.random()-.5);pickDS();}
-function pickDS(){if(!sdSQ.length)nextDS();sdCur=sdSQ.pop();document.getElementById('sd-spell').textContent=sdCur.s;document.getElementById('sd-hint').textContent=sdCur.hint;document.getElementById('sd-input').value='';}
-function updateBars(){
-    document.getElementById('sd-p-hp').textContent=sdPHP+' HP';
-    document.getElementById('sd-e-hp').textContent=sdEHP+' HP';
-    document.getElementById('sd-p-bar').style.width=Math.max(0,sdPHP)+'%';
-    document.getElementById('sd-e-bar').style.width=Math.max(0,(sdEHP/sdEMax)*100)+'%';
-}
-function castSpell(){
-    const v=document.getElementById('sd-input').value.trim().toUpperCase();
-    if(!v||!sdCur)return;
-    const log=document.getElementById('sd-log');
-    function addLog(txt,cls){const d=document.createElement('div');d.className='dl'+(cls?' '+cls:'');d.textContent=txt;log.appendChild(d);log.scrollTop=log.scrollHeight;}
-    if(v===sdCur.s){
-        if(sdCur.heal){sdPHP=Math.min(100,sdPHP+sdCur.heal);addLog('✅ '+sdCur.s+' — '+sdCur.desc,'heal');}
-        else{sdEHP-=sdCur.d;addLog('⚡ '+sdCur.s+' — '+sdCur.desc,'hit');}
-        updateBars();if(sdEHP<=0){endDuel(true);return;}pickDS();
-    }else{
-        const dmg=Math.floor(Math.random()*15)+8;sdPHP-=dmg;
-        addLog('✗ Wrong! '+EA[Math.floor(Math.random()*EA.length)]+' (−'+dmg+' HP)','bad');
-        updateBars();if(sdPHP<=0){endDuel(false);return;}
-        document.getElementById('sd-input').value='';
-    }
-}
-function endDuel(won){
-    document.getElementById('sd-game').style.display='none';
-    document.getElementById('sd-result').style.display='block';
-    document.getElementById('sd-r-emoji').textContent=won?'🏆':'💀';
-    document.getElementById('sd-r-title').textContent=won?'Victory!':'Defeated…';
-    document.getElementById('sd-r-sub').textContent=won?`You defeated ${sdEName}! The wizarding world is safe!`:`${sdEName} has defeated you. Train harder!`;
-}
-document.getElementById('sd-input').addEventListener('keydown',e=>{if(e.key==='Enter')castSpell();});
+/* ══ HAMBURGER ══ */
+const ham=document.getElementById('hamburger');
+const drawer=document.getElementById('nav-drawer');
+const navOvl=document.getElementById('nav-overlay');
+function openDrawer(){ ham.classList.add('open'); drawer.classList.add('open'); navOvl.classList.add('show'); document.body.style.overflow='hidden'; }
+function closeDrawer(){ ham.classList.remove('open'); drawer.classList.remove('open'); navOvl.classList.remove('show'); document.body.style.overflow=''; }
+ham.addEventListener('click',()=>drawer.classList.contains('open')?closeDrawer():openDrawer());
+navOvl.addEventListener('click',closeDrawer);
+document.querySelectorAll('.nav-drawer-link').forEach(l=>l.addEventListener('click',closeDrawer));
 </script>
 </body>
 </html>
