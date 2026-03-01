@@ -1109,7 +1109,26 @@ const triviaBank = [
     {q:"What shape is the scar on Harry Potter's forehead?",opts:["Star","Lightning bolt","Diamond","Circle"],correct:1,house:"gryffindor"},
     {q:"What magical creature is Dobby?",opts:["House-elf","Goblin","Boggart","Brownie"],correct:0,house:"hufflepuff"},
 ];
-let triviaIdx=0, triviaAnswered=false;
+let triviaIdx=0, triviaAnswered=false, triviaCorrect=0, snitchShown=false;
+
+function showSnitchVoucher(){
+    if(snitchShown) return;
+    snitchShown=true;
+    const toast=document.createElement('div');
+    toast.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#1a1000,#0f0a00);border:1px solid var(--gold);color:var(--parchment);font-family:Cinzel,serif;font-size:.62rem;letter-spacing:3px;padding:22px 32px;text-align:center;z-index:99500;text-transform:uppercase;transition:transform .55s cubic-bezier(.34,1.56,.64,1);max-width:90vw;box-shadow:0 0 40px rgba(201,168,76,.25)';
+    toast.innerHTML=`
+        <div style="font-size:1.8rem;margin-bottom:10px">🏅</div>
+        <div style="color:var(--gold);font-family:'Cinzel Decorative',serif;font-size:.85rem;margin-bottom:6px;letter-spacing:2px">Golden Snitch Caught!</div>
+        <div style="color:rgba(245,234,214,.7);font-size:.55rem;letter-spacing:3px;margin-bottom:14px">7+ CORRECT ANSWERS — YOU'RE A WIZARD!</div>
+        <div style="border:1px solid rgba(201,168,76,.4);padding:10px 20px;background:rgba(201,168,76,.08)">
+            <div style="font-size:.5rem;letter-spacing:3px;color:rgba(245,234,214,.5);margin-bottom:5px">YOUR VOUCHER CODE</div>
+            <div style="font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);letter-spacing:6px">SNITCH10</div>
+            <div style="font-size:.48rem;letter-spacing:2px;color:rgba(245,234,214,.45);margin-top:5px">10% OFF MEMBERSHIP</div>
+        </div>`;
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.style.transform='translateX(-50%) translateY(0)',50);
+    setTimeout(()=>{toast.style.transform='translateX(-50%) translateY(120px)';setTimeout(()=>toast.remove(),600);},8000);
+}
 // Load streak
 let streak=parseInt(localStorage.getItem('hp_streak')||'0');
 const lastDate=localStorage.getItem('hp_last_date')||'';
@@ -1143,6 +1162,8 @@ function answerTrivia(idx){
         res.className='trivia-result right show';
         res.textContent='⚡ Correct! 10 points to '+t.house.charAt(0).toUpperCase()+t.house.slice(1)+'!';
         addHousePoints(t.house,10);
+        triviaCorrect++;
+        if(triviaCorrect>=7) showSnitchVoucher();
         // update streak
         if(localStorage.getItem('hp_last_date')!==today){
             streak++;
